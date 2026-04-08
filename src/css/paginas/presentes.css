@@ -1,0 +1,291 @@
+/* ============================================================
+   PRESENTES — CSS
+   ============================================================ */
+
+.pres-container {
+    padding-top: 48px;
+    padding-bottom: 80px;
+}
+
+/* Barra de progresso */
+.pres-progress-bar {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 32px;
+}
+.pres-progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .85rem;
+    color: var(--blue2);
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.pres-bar {
+    height: 8px;
+    background: var(--whiteblue4);
+    border-radius: 50px;
+    overflow: hidden;
+}
+.pres-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--blue3), var(--blue5));
+    border-radius: 50px;
+    transition: width 0.8s ease;
+    min-width: 4px;
+}
+
+/* Filtros */
+.pres-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+.filter-btn {
+    padding: 7px 18px;
+    border-radius: 50px;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--blue3);
+    background: var(--card-bg);
+    border: 1.5px solid var(--blue5);
+    transition: var(--transition);
+    cursor: pointer;
+}
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--blue3);
+    color: var(--white);
+    border-color: var(--blue3);
+}
+
+/* Grid */
+.pres-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Card presente */
+.pres-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    transition: var(--transition);
+    border: 1px solid rgba(78,139,184,.1);
+    overflow: hidden;
+}
+.pres-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+.pres-card--done {
+    opacity: .72;
+}
+.pres-card--done::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 12px,
+        rgba(46,158,91,.05) 12px,
+        rgba(46,158,91,.05) 13px
+    );
+    border-radius: var(--radius);
+    pointer-events: none;
+}
+
+/* Badge */
+.pres-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    padding: 4px 12px;
+    border-radius: 50px;
+    align-self: flex-start;
+}
+.pres-badge--done {
+    background: rgba(46, 158, 91, .12);
+    color: var(--status-ok);
+    border: 1px solid rgba(46, 158, 91, .25);
+}
+.pres-badge--open {
+    background: rgba(78, 139, 184, .1);
+    color: var(--blue3);
+    border: 1px solid rgba(78, 139, 184, .25);
+}
+
+/* Ícone do card */
+.pres-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--whiteblue4), var(--whiteblue3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pres-card-icon i {
+    font-size: 1.4rem;
+    color: var(--blue3);
+}
+
+/* Body do card */
+.pres-card-body { flex: 1; }
+.pres-cat {
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--blue4);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+}
+.pres-name {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--blue1);
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+.pres-desc {
+    font-size: .82rem;
+    color: var(--blue4);
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+.pres-price {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--blue2);
+    margin: 0;
+}
+
+/* Ações */
+.pres-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.btn-sm-custom {
+    padding: 9px 18px !important;
+    font-size: .82rem !important;
+    justify-content: center;
+}
+.pres-dado-por {
+    font-size: .82rem;
+    color: var(--status-ok);
+    font-weight: 500;
+    text-align: center;
+    margin: 0;
+}
+
+/* Empty state */
+.pres-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--blue4);
+}
+.pres-empty i {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    display: block;
+}
+
+/* Modal */
+.modal-custom {
+    border-radius: var(--radius);
+    border: none;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+.modal-header-custom {
+    background: linear-gradient(135deg, var(--blue1), var(--blue2));
+    color: var(--white);
+    border: none;
+    padding: 20px 24px;
+}
+.modal-header-custom .modal-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+.modal-present-name {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--blue2);
+    background: var(--whiteblue5);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+}
+.modal-text {
+    font-size: .88rem;
+    color: var(--blue3);
+    margin-bottom: 16px;
+}
+.modal-footer-custom {
+    border-top: 1px solid var(--whiteblue4);
+    padding: 16px 24px;
+    gap: 10px;
+}
+
+/* Form inputs (global pra todas as páginas) */
+.form-group-custom {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+.form-group-custom label {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--blue2);
+}
+.input-custom {
+    width: 100%;
+    padding: 11px 16px;
+    border: 1.5px solid var(--whiteblue3);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-base);
+    font-size: .9rem;
+    color: var(--blue1);
+    background: var(--white);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    outline: none;
+}
+.input-custom:focus {
+    border-color: var(--blue4);
+    box-shadow: 0 0 0 3px rgba(78,139,184,.15);
+}
+.input-custom.is-invalid {
+    border-color: var(--status-no);
+}
+.input-error {
+    font-size: .78rem;
+    color: var(--status-no);
+    min-height: 18px;
+}
+
+/* Responsividade */
+@media screen and (max-width: 991px) {
+    .pres-grid { grid-template-columns: 1fr 1fr; }
+}
+@media screen and (max-width: 576px) {
+    .pres-grid { grid-template-columns: 1fr; }
+    .pres-container { padding-top: 32px; }
+}

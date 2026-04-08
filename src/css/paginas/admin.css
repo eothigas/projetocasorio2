@@ -1,0 +1,225 @@
+/* ============================================================
+   ADMIN — CSS
+   ============================================================ */
+
+body.admin-body {
+    background: var(--whiteblue5);
+    min-height: 100vh;
+}
+
+/* Topbar admin */
+.admin-topbar {
+    background: var(--blue1);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(4,35,66,.3);
+}
+.admin-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1rem;
+}
+.admin-topbar-brand i { color: var(--blue5); font-size: 1.2rem; }
+.admin-topbar a {
+    color: var(--whiteblue4);
+    font-size: .85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+.admin-topbar a:hover { color: var(--white); }
+
+/* Layout */
+.admin-main {
+    padding: 32px 24px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Stats cards */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+.stat-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+.stat-icon--blue   { background: rgba(51,111,165,.12); color: var(--blue3); }
+.stat-icon--green  { background: rgba(46,158,91,.12);  color: var(--status-ok); }
+.stat-icon--yellow { background: rgba(232,160,32,.12); color: var(--status-pend); }
+.stat-icon--red    { background: rgba(192,57,43,.12);  color: var(--status-no); }
+.stat-num {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--blue1);
+    line-height: 1;
+}
+.stat-label {
+    display: block;
+    font-size: .75rem;
+    color: var(--blue4);
+    margin-top: 2px;
+}
+
+/* Nav tabs admin */
+.admin-nav {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--whiteblue4);
+    padding-bottom: 0;
+}
+.admin-tab {
+    padding: 10px 20px;
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--blue4);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: -2px;
+    border-bottom: 2px solid transparent;
+}
+.admin-tab:hover { color: var(--blue2); }
+.admin-tab.active {
+    color: var(--blue2);
+    border-bottom-color: var(--blue2);
+    font-weight: 600;
+}
+
+/* Tabelas */
+.admin-table-wrap {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .86rem;
+}
+.admin-table th {
+    background: var(--blue1);
+    color: var(--white);
+    padding: 13px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: .78rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+.admin-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--whiteblue4);
+    color: var(--blue1);
+    vertical-align: middle;
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: var(--whiteblue5); }
+
+/* Badges de status */
+.badge-ok    { background: rgba(46,158,91,.12);  color: var(--status-ok);   padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; }
+.badge-pend  { background: rgba(232,160,32,.12); color: var(--status-pend); padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; }
+
+/* Botões de ação da tabela */
+.btn-action {
+    padding: 5px 12px;
+    border-radius: var(--radius-xs);
+    font-size: .78rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+.btn-action--approve { background: rgba(46,158,91,.12);  color: var(--status-ok);   border: 1px solid rgba(46,158,91,.3); }
+.btn-action--approve:hover { background: var(--status-ok); color: #fff; }
+.btn-action--delete  { background: rgba(192,57,43,.08);  color: var(--status-no);   border: 1px solid rgba(192,57,43,.3); }
+.btn-action--delete:hover  { background: var(--status-no); color: #fff; }
+
+/* Login */
+.admin-login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--blue1), var(--blue2));
+    padding: 20px;
+}
+.admin-login-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+.admin-login-card h1 {
+    font-family: var(--font-dif);
+    font-size: 2.4rem;
+    color: var(--blue2);
+    margin-bottom: 4px;
+}
+.admin-login-card p {
+    font-size: .85rem;
+    color: var(--blue4);
+    margin-bottom: 28px;
+}
+.admin-login-card form {
+    text-align: left;
+}
+.admin-login-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+/* Responsividade admin */
+@media screen and (max-width: 768px) {
+    .admin-stats { grid-template-columns: 1fr 1fr; }
+    .admin-table-wrap { overflow-x: auto; }
+    .admin-table { min-width: 600px; }
+}
+@media screen and (max-width: 576px) {
+    .admin-stats { grid-template-columns: 1fr; }
+    .admin-main  { padding: 20px 12px 40px; }
+    .admin-login-card { padding: 32px 24px; }
+}

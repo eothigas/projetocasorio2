@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap');
+
+/* ============================================================
+   VARIÁVEIS GLOBAIS
+   ============================================================ */
+:root {
+    /* Blues (paleta principal) */
+    --blue1: rgb(4, 35, 66);
+    --blue2: rgb(20, 71, 118);
+    --blue3: rgb(51, 111, 165);
+    --blue4: rgb(78, 139, 184);
+    --blue5: rgb(111, 173, 210);
+    --blue6: rgb(158, 202, 227);
+
+    --whiteblue1: rgb(138, 171, 214);
+    --whiteblue2: rgb(146, 182, 214);
+    --whiteblue3: rgb(172, 203, 232);
+    --whiteblue3-1: rgba(172, 203, 232, 0.7);
+    --whiteblue4: rgb(221, 241, 250);
+    --whiteblue5: rgb(240, 248, 255);
+
+    --white: #ffffff;
+
+    /* Tipografia */
+    --font-base:  'Poppins', Arial, sans-serif;
+    --font-dif:   'Great Vibes', cursive;
+    --font-serif: 'Playfair Display', serif;
+
+    /* Status — confirmação / admin */
+    --status-ok:   #2e9e5b;
+    --status-pend: #e8a020;
+    --status-no:   #c0392b;
+
+    /* Cards & sombras */
+    --card-bg:   rgba(255, 255, 255, 0.92);
+    --shadow:    0 4px 24px rgba(4, 35, 66, 0.10);
+    --shadow-md: 0 6px 32px rgba(4, 35, 66, 0.15);
+    --shadow-lg: 0 10px 48px rgba(4, 35, 66, 0.20);
+
+    /* Bordas */
+    --radius:    16px;
+    --radius-sm: 8px;
+    --radius-xs: 4px;
+
+    /* Transição padrão */
+    --transition: all 0.35s ease;
+}
+
+/* ============================================================
+   RESET GERAL
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-base);
+    color: var(--blue1);
+    background-color: var(--whiteblue5);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+ul {
+    list-style: none;
+}
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+.container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ============================================================
+   UTILITÁRIOS GLOBAIS
+   ============================================================ */
+.section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--blue2);
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.section-subtitle {
+    font-size: .95rem;
+    color: var(--blue4);
+    text-align: center;
+    letter-spacing: .05em;
+    margin-bottom: 40px;
+}
+
+.divider-heart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0 32px;
+}
+.divider-heart span {
+    display: block;
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--blue4));
+    border-radius: 4px;
+}
+.divider-heart span:last-child {
+    background: linear-gradient(to left, transparent, var(--blue4));
+}
+.divider-heart i {
+    color: var(--blue4);
+    font-size: 1rem;
+}
+
+/* Botões */
+.btn-primary-custom {
+    background: var(--blue2);
+    color: var(--white);
+    border: none;
+    padding: 12px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: .9rem;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-primary-custom:hover {
+    background: var(--blue1);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-outline-custom {
+    background: transparent;
+    color: var(--blue3);
+    border: 2px solid var(--blue3);
+    padding: 10px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: .9rem;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-outline-custom:hover {
+    background: var(--blue3);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+/* Page hero banner (páginas internas) */
+.page-hero {
+    background: linear-gradient(135deg, var(--blue1) 0%, var(--blue2) 60%, var(--blue3) 100%);
+    padding: 110px 20px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.page-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.page-hero-icon {
+    font-size: 2.5rem;
+    color: var(--blue6);
+    margin-bottom: 12px;
+    position: relative;
+}
+.page-hero h1 {
+    font-family: var(--font-dif);
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    color: var(--white);
+    position: relative;
+    margin-bottom: 8px;
+}
+.page-hero p {
+    font-size: .95rem;
+    color: var(--whiteblue4);
+    letter-spacing: .08em;
+    position: relative;
+}
+
+/* Card padrão */
+.card-custom {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px;
+    transition: var(--transition);
+}
+.card-custom:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+}
+
+/* Alertas customizados */
+.alert-success-custom {
+    background: rgba(46, 158, 91, .12);
+    border: 1px solid rgba(46, 158, 91, .4);
+    color: #1e6e3e;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    font-size: .9rem;
+}
+.alert-error-custom {
+    background: rgba(192, 57, 43, .10);
+    border: 1px solid rgba(192, 57, 43, .35);
+    color: #8e1a0f;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    font-size: .9rem;
+}
+
+/* Responsividade global */
+@media screen and (max-width: 991px) {
+    .container {
+        padding: 0 16px;
+    }
+}
+@media screen and (max-width: 576px) {
+    .btn-primary-custom,
+    .btn-outline-custom {
+        width: 100%;
+        justify-content: center;
+    }
+}

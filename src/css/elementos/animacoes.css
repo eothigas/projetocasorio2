@@ -1,0 +1,56 @@
+/* Bloco de Animações */
+
+.hidden {
+    opacity: 0 !important;
+}
+
+.fadeInUp {
+    animation: fadeInUp 2s ease-in-out forwards;
+}
+
+.fadeInDown {
+    animation: fadeInDown 2s ease-in-out forwards;
+}
+
+.fadeInRight {
+    animation: fadeInRight 2s ease forwards;
+}
+.fadeInRightDelay {
+    animation: fadeInRight 2s ease-in-out forwards;
+    animation-delay: 1.5s;
+}
+
+.fadeInLeft {
+    opacity: 1;
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+}
+.fadeInLeftDelay {
+    opacity: 1;
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+    animation-delay: 1s;
+}
+.fadeInLeftDelay-sd {
+    opacity: 1;
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+    animation-delay: 2s;
+}
+.fadeInLeftDelay-th {
+    opacity: 1;
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+    animation-delay: 3s;
+}
+.fadeInLeftDelay-fr {
+    opacity: 1;
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+    animation-delay: 4s;
+}
+.fadeInLeftDelay-fv {
+    opacity: 1;
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+    animation-delay: 5s;
+}
+.fadeInLeftDelay-sx {
+    opacity: 1;
+    animation: fadeInLeft 1.5s ease-in-out forwards;
+    animation-delay: 6s;
+}

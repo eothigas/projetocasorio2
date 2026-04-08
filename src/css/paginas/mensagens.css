@@ -1,0 +1,154 @@
+/* ============================================================
+   MENSAGENS — CSS
+   ============================================================ */
+
+.msg-container {
+    padding-top: 48px;
+    padding-bottom: 80px;
+    max-width: 860px;
+}
+
+/* Card do formulário */
+.msg-form-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin-bottom: 56px;
+}
+
+.msg-form-header {
+    background: linear-gradient(135deg, var(--blue1), var(--blue2));
+    padding: 32px 36px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.msg-form-header > i {
+    font-size: 2rem;
+    color: var(--blue6);
+}
+.msg-form-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--white);
+    margin: 0;
+}
+.msg-form-header p {
+    font-size: .8rem;
+    color: var(--whiteblue3);
+    margin: 0;
+    letter-spacing: .06em;
+}
+
+#form-mensagem {
+    padding: 32px 36px;
+}
+
+/* Contador de caracteres */
+.char-counter {
+    display: block;
+    text-align: right;
+    font-size: .75rem;
+    color: var(--blue4);
+    margin-top: -12px;
+    margin-bottom: 4px;
+}
+
+.msg-submit {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 32px;
+    font-size: .95rem;
+}
+
+#msg-alert { margin-bottom: 0; }
+#msg-alert:empty { display: none; }
+
+/* Mural header */
+.msg-mural-header {
+    margin-bottom: 28px;
+}
+
+/* Grid de mensagens */
+.msg-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Card de mensagem */
+.msg-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 24px 20px;
+    position: relative;
+    transition: var(--transition);
+    border-top: 3px solid var(--blue4);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.msg-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.msg-quote {
+    font-size: 2.2rem;
+    color: var(--whiteblue3);
+    line-height: 1;
+    margin-bottom: -6px;
+}
+
+.msg-text {
+    font-size: .9rem;
+    color: var(--blue1);
+    line-height: 1.65;
+    flex: 1;
+    margin: 0;
+    font-style: italic;
+}
+
+.msg-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--whiteblue4);
+    margin-top: auto;
+}
+.msg-author {
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--blue3);
+}
+.msg-date {
+    font-size: .75rem;
+    color: var(--blue5);
+}
+
+/* Empty state */
+.msg-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--blue4);
+}
+.msg-empty i {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    display: block;
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+    #form-mensagem { padding: 24px 20px; }
+    .msg-form-header { padding: 24px 20px; }
+    .msg-grid { grid-template-columns: 1fr; }
+}
+@media screen and (max-width: 576px) {
+    .msg-container { padding-top: 32px; }
+}
