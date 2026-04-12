@@ -3,69 +3,100 @@
    ============================================================ */
 
 .msg-container {
-    padding-top: 48px;
+    padding-top: 52px;
     padding-bottom: 80px;
     max-width: 860px;
 }
 
 /* Card do formulário */
 .msg-form-card {
-    background: var(--card-bg);
+    background: var(--white);
     border-radius: var(--radius);
     box-shadow: var(--shadow-md);
     overflow: hidden;
     margin-bottom: 56px;
+    border-top: 4px solid var(--blue4);
 }
 
+/* Header elegante (claro) */
 .msg-form-header {
-    background: linear-gradient(135deg, var(--blue1), var(--blue2));
-    padding: 32px 36px;
+    background: linear-gradient(180deg, var(--whiteblue5) 0%, var(--white) 100%);
+    padding: 36px 40px 28px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-}
-.msg-form-header > i {
-    font-size: 2rem;
-    color: var(--blue6);
-}
-.msg-form-header h2 {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    color: var(--white);
-    margin: 0;
-}
-.msg-form-header p {
-    font-size: .8rem;
-    color: var(--whiteblue3);
-    margin: 0;
-    letter-spacing: .06em;
+    gap: 10px;
+    border-bottom: 1px solid var(--whiteblue4);
 }
 
-#form-mensagem {
-    padding: 32px 36px;
+.msg-form-header-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue2), var(--blue3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(20,71,118,.25);
+    margin-bottom: 4px;
 }
+.msg-form-header-icon i {
+    font-size: 1.6rem;
+    color: var(--white);
+}
+
+.msg-form-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.55rem;
+    color: var(--blue1);
+    margin: 0;
+    font-weight: 600;
+}
+.msg-form-header p {
+    font-size: .82rem;
+    color: var(--blue4);
+    margin: 0;
+    letter-spacing: .04em;
+}
+
+/* Corpo do formulário */
+#form-mensagem {
+    padding: 32px 40px 36px;
+}
+
+#msg-alert {
+    padding: 0 40px;
+    margin-bottom: 0;
+}
+#msg-alert:empty { display: none; }
 
 /* Contador de caracteres */
 .char-counter {
     display: block;
     text-align: right;
-    font-size: .75rem;
-    color: var(--blue4);
-    margin-top: -12px;
-    margin-bottom: 4px;
+    font-size: .73rem;
+    color: var(--blue5);
+    margin-top: 6px;
+    letter-spacing: .03em;
 }
 
+/* Botão de envio */
 .msg-submit {
     width: 100%;
     justify-content: center;
-    padding: 14px 32px;
+    padding: 15px 32px;
     font-size: .95rem;
+    border-radius: 10px;
+    letter-spacing: .05em;
+    background: linear-gradient(135deg, var(--blue2), var(--blue3));
+    box-shadow: 0 4px 16px rgba(20,71,118,.2);
 }
-
-#msg-alert { margin-bottom: 0; }
-#msg-alert:empty { display: none; }
+.msg-submit:hover {
+    background: linear-gradient(135deg, var(--blue1), var(--blue2));
+    box-shadow: 0 6px 24px rgba(20,71,118,.3);
+    transform: translateY(-2px);
+}
 
 /* Mural header */
 .msg-mural-header {
@@ -81,7 +112,7 @@
 
 /* Card de mensagem */
 .msg-card {
-    background: var(--card-bg);
+    background: var(--white);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     padding: 28px 24px 20px;
@@ -145,10 +176,13 @@
 
 /* Responsividade */
 @media screen and (max-width: 768px) {
-    #form-mensagem { padding: 24px 20px; }
-    .msg-form-header { padding: 24px 20px; }
+    #form-mensagem { padding: 24px 24px 28px; }
+    .msg-form-header { padding: 28px 24px 22px; }
+    #msg-alert { padding: 0 24px; }
     .msg-grid { grid-template-columns: 1fr; }
 }
 @media screen and (max-width: 576px) {
     .msg-container { padding-top: 32px; }
+    .msg-form-header-icon { width: 52px; height: 52px; }
+    .msg-form-header-icon i { font-size: 1.3rem; }
 }

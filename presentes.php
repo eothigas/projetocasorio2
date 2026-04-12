@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__) . '/config/config.php';
+require_once __DIR__ . '/config/config.php';
 require_once ROOT_DIR . '/includes/db.php';
 
 $pageTitle = 'Lista de Presentes · ' . NOIVA . ' &amp; ' . NOIVO;
@@ -16,20 +16,20 @@ try {
 
     // Lista de presentes
     if ($categoria) {
-        $stmt = $db->prepare("SELECT * FROM presentes WHERE categoria = ? ORDER BY comprado ASC, nome ASC");
+        $stmt = $db->prepare("SELECT * FROM presentes WHERE categoria = ? ORDER BY nome ASC");
         $stmt->execute([$categoria]);
     } else {
-        $stmt = $db->query("SELECT * FROM presentes ORDER BY comprado ASC, nome ASC");
+        $stmt = $db->query("SELECT * FROM presentes ORDER BY categoria ASC, nome ASC");
     }
     $presentes = $stmt->fetchAll();
 
-    $total     = count($presentes);
-    $comprados = count(array_filter($presentes, fn($p) => $p['comprado']));
+    $total         = count($presentes);
+    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM presentes_escolhas")->fetchColumn();
 
 } catch (Exception $e) {
     $presentes = [];
     $cats      = [];
-    $total = $comprados = 0;
+    $total = $totalEscolhas = 0;
 }
 
 require_once ROOT_DIR . '/includes/_head.php';
@@ -47,25 +47,22 @@ require_once ROOT_DIR . '/includes/_navbar.php';
 
     <div class="container pres-container">
 
-        <!-- Progresso -->
+        <!-- Contador de escolhas -->
         <div class="pres-progress-bar hidden" data-animation="fadeInUp">
             <div class="pres-progress-info">
-                <span><i class="bi bi-gift-fill me-1"></i><?= $comprados ?> de <?= $total ?> presentes escolhidos</span>
-                <span><?= $total > 0 ? round($comprados / $total * 100) : 0 ?>%</span>
-            </div>
-            <div class="pres-bar">
-                <div class="pres-bar-fill" style="width:<?= $total > 0 ? round($comprados / $total * 100) : 0 ?>%"></div>
+                <span><i class="bi bi-gift-fill me-1"></i><?= $total ?> presentes na lista</span>
+                <span><?= $totalEscolhas ?> escolha<?= $totalEscolhas !== 1 ? 's' : '' ?> registrada<?= $totalEscolhas !== 1 ? 's' : '' ?></span>
             </div>
         </div>
 
         <!-- Filtro de categorias -->
         <div class="pres-filter hidden" data-animation="fadeInUp">
-            <a href="<?= BASE_URL ?>/pages/presentes.php"
+            <a href="<?= BASE_URL ?>/presentes"
                class="filter-btn <?= !$categoria ? 'active' : '' ?>">
                 Todos
             </a>
             <?php foreach ($cats as $c): ?>
-            <a href="<?= BASE_URL ?>/pages/presentes.php?cat=<?= urlencode($c['categoria']) ?>"
+            <a href="<?= BASE_URL ?>/presentes?cat=<?= urlencode($c['categoria']) ?>"
                class="filter-btn <?= $categoria === $c['categoria'] ? 'active' : '' ?>">
                 <?= htmlspecialchars($c['categoria']) ?>
             </a>
@@ -81,15 +78,9 @@ require_once ROOT_DIR . '/includes/_navbar.php';
         <?php else: ?>
         <div class="pres-grid" id="pres-grid">
             <?php foreach ($presentes as $p): ?>
-            <div class="pres-card <?= $p['comprado'] ? 'pres-card--done' : '' ?> hidden" data-animation="fadeInUp">
+            <div class="pres-card hidden" data-animation="fadeInUp">
 
-                <?php if ($p['comprado']): ?>
-                <div class="pres-badge pres-badge--done">
-                    <i class="bi bi-check-circle-fill me-1"></i>Escolhido
-                </div>
-                <?php else: ?>
                 <div class="pres-badge pres-badge--open">Disponível</div>
-                <?php endif; ?>
 
                 <div class="pres-card-icon">
                     <i class="bi bi-gift"></i>
@@ -107,24 +98,17 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                 </div>
 
                 <div class="pres-card-actions">
-                    <?php if (!$p['comprado']): ?>
-                        <?php if ($p['link'] && $p['link'] !== '#'): ?>
-                        <a href="<?= htmlspecialchars($p['link']) ?>" target="_blank" rel="noopener"
-                           class="btn-outline-custom btn-sm-custom">
-                            <i class="bi bi-bag"></i> Ver produto
-                        </a>
-                        <?php endif; ?>
-                        <button class="btn-primary-custom btn-sm-custom btn-escolher"
-                                data-id="<?= $p['id'] ?>"
-                                data-nome="<?= htmlspecialchars($p['nome'], ENT_QUOTES) ?>">
-                            <i class="bi bi-heart"></i> Quero dar este
-                        </button>
-                    <?php else: ?>
-                        <p class="pres-dado-por">
-                            <i class="bi bi-person-heart me-1"></i>
-                            <?= $p['comprado_por'] ? 'Escolhido por ' . htmlspecialchars($p['comprado_por']) : 'Já escolhido' ?>
-                        </p>
+                    <?php if ($p['link'] && $p['link'] !== '#'): ?>
+                    <a href="<?= htmlspecialchars($p['link']) ?>" target="_blank" rel="noopener"
+                       class="btn-outline-custom btn-sm-custom">
+                        <i class="bi bi-bag"></i> Ver produto
+                    </a>
                     <?php endif; ?>
+                    <button class="btn-primary-custom btn-sm-custom btn-escolher"
+                            data-id="<?= $p['id'] ?>"
+                            data-nome="<?= htmlspecialchars($p['nome'], ENT_QUOTES) ?>">
+                        <i class="bi bi-heart"></i> Quero dar este
+                    </button>
                 </div>
 
             </div>

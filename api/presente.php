@@ -32,8 +32,8 @@ if (strlen($nome) < 3) {
 try {
     $db = getDB();
 
-    // Verifica se o presente existe e está disponível
-    $stmt = $db->prepare("SELECT id, nome, comprado FROM presentes WHERE id = ? FOR UPDATE");
+    // Verifica se o presente existe
+    $stmt = $db->prepare("SELECT id, nome FROM presentes WHERE id = ?");
     $stmt->execute([$id]);
     $presente = $stmt->fetch();
 
@@ -41,16 +41,11 @@ try {
         echo json_encode(['success' => false, 'message' => 'Presente não encontrado.']);
         exit;
     }
-    if ($presente['comprado']) {
-        echo json_encode(['success' => false, 'message' => 'Este presente já foi escolhido por outra pessoa. Escolha outro!']);
-        exit;
-    }
 
-    // Marca como comprado
-    $upd = $db->prepare(
-        "UPDATE presentes SET comprado = 1, comprado_por = ?, comprado_em = NOW() WHERE id = ?"
-    );
-    $upd->execute([$nome, $id]);
+    // Registra a escolha (ilimitado — várias pessoas podem escolher o mesmo presente)
+    $db->prepare(
+        "INSERT INTO presentes_escolhas (presente_id, nome) VALUES (?, ?)"
+    )->execute([$id, $nome]);
 
     echo json_encode([
         'success' => true,

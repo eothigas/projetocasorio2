@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__) . '/config/config.php';
+require_once __DIR__ . '/config/config.php';
 
 $pageTitle = 'Local do Casamento · ' . NOIVA . ' &amp; ' . NOIVO;
 $pageCSS   = ['local.css'];
@@ -104,7 +104,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                 <i class="bi bi-telephone-fill"></i>
                 <h4>Dúvidas?</h4>
                 <p>Em caso de dúvidas ou imprevistos, confirme sua presença pelo site ou entre em contato com os noivos.</p>
-                <a href="<?= BASE_URL ?>/pages/confirmacao.php" class="btn-outline-custom" style="margin-top:12px;">
+                <a href="<?= BASE_URL ?>/confirmacao" class="btn-outline-custom" style="margin-top:12px;">
                     <i class="bi bi-check-circle"></i> Confirmar Presença
                 </a>
             </div>

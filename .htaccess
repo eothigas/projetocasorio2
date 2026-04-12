@@ -1,0 +1,13 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Redireciona URLs com .php para URL limpa (301 permanente)
+RewriteCond %{THE_REQUEST} ^[A-Z]+\s(.+)\.php[?\s] [NC]
+RewriteRule ^ %1 [R=301,L,NE]
+
+# Serve internamente o arquivo .php quando a URL limpa é acessada
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L,QSA]

@@ -4,7 +4,7 @@ require_once ROOT_DIR . '/includes/db.php';
 
 session_start();
 if (!($_SESSION['admin_ok'] ?? false)) {
-    header('Location: ' . BASE_URL . '/admin/login.php');
+    header('Location: ' . BASE_URL . '/admin/login');
     exit;
 }
 
@@ -20,20 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->prepare("DELETE FROM mensagens WHERE id = ?")->execute([$id]);
         }
     } catch (Exception $e) {}
-    header('Location: ' . BASE_URL . '/admin/mensagens.php');
+    header('Location: ' . BASE_URL . '/admin/mensagens');
     exit;
 }
 
 try {
     $db   = getDB();
     $msgs = $db->query("SELECT * FROM mensagens ORDER BY aprovado ASC, criado_em DESC")->fetchAll();
-    $totalConf = (int) $db->query("SELECT COUNT(*) FROM confirmacoes")->fetchColumn();
-    $totalPres = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
-    $comprados = (int) $db->query("SELECT COUNT(*) FROM presentes WHERE comprado = 1")->fetchColumn();
+    $totalConf = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
+    $totalPres     = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
+    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM presentes_escolhas")->fetchColumn();
     $msgPend   = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 0")->fetchColumn();
 } catch (Exception $e) {
     $msgs = [];
-    $totalConf = $totalPres = $comprados = $msgPend = 0;
+    $totalConf = $totalPres = $totalEscolhas = $msgPend = 0;
 }
 ?>
 <!DOCTYPE html>
@@ -56,8 +56,8 @@ try {
         <?= NOIVA ?> &amp; <?= NOIVO ?> · Admin
     </div>
     <div style="display:flex;gap:16px;align-items:center;">
-        <a href="<?= BASE_URL ?>/index.php" target="_blank"><i class="bi bi-eye"></i> Ver site</a>
-        <a href="<?= BASE_URL ?>/admin/logout.php"><i class="bi bi-box-arrow-right"></i> Sair</a>
+        <a href="<?= BASE_URL ?>/" target="_blank"><i class="bi bi-eye"></i> Ver site</a>
+        <a href="<?= BASE_URL ?>/admin/logout"><i class="bi bi-box-arrow-right"></i> Sair</a>
     </div>
 </div>
 
@@ -67,13 +67,16 @@ try {
 
     <!-- Nav tabs -->
     <div class="admin-nav">
-        <a href="<?= BASE_URL ?>/admin/index.php" class="admin-tab">
+        <a href="<?= BASE_URL ?>/admin/index" class="admin-tab">
             <i class="bi bi-people"></i> Confirmações (<?= $totalConf ?>)
         </a>
-        <a href="<?= BASE_URL ?>/admin/presentes.php" class="admin-tab">
-            <i class="bi bi-gift"></i> Presentes (<?= $comprados ?>/<?= $totalPres ?>)
+        <a href="<?= BASE_URL ?>/admin/convidados" class="admin-tab">
+            <i class="bi bi-person-lines-fill"></i> Convidados
         </a>
-        <a href="<?= BASE_URL ?>/admin/mensagens.php" class="admin-tab active">
+        <a href="<?= BASE_URL ?>/admin/presentes" class="admin-tab">
+            <i class="bi bi-gift"></i> Presentes (<?= $totalPres ?>) · <?= $totalEscolhas ?> escolha<?= $totalEscolhas !== 1 ? 's' : '' ?>
+        </a>
+        <a href="<?= BASE_URL ?>/admin/mensagens" class="admin-tab active">
             <i class="bi bi-chat-heart"></i> Mensagens
             <?php if ($msgPend > 0): ?>
             <span class="badge-pend"><?= $msgPend ?> pendente<?= $msgPend > 1 ? 's' : '' ?></span>

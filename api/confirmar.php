@@ -17,51 +17,64 @@ if (!$body) {
     exit;
 }
 
-// Sanitização
-$nome          = trim(strip_tags($body['nome']          ?? ''));
-$email         = trim(filter_var($body['email'] ?? '', FILTER_SANITIZE_EMAIL));
-$telefone      = trim(strip_tags($body['telefone']      ?? ''));
-$acompanhantes = max(0, (int) ($body['acompanhantes']   ?? 0));
-$restricoes    = trim(strip_tags($body['restricoes']    ?? ''));
-$mensagem      = trim(strip_tags($body['mensagem']      ?? ''));
+$nome   = trim(strip_tags($body['nome']   ?? ''));
+$codigo = strtoupper(trim(strip_tags($body['codigo'] ?? '')));
 
-// Validação
-if (strlen($nome) < 3) {
-    echo json_encode(['success' => false, 'message' => 'Por favor, informe seu nome completo.']);
+if (strlen($nome) < 2) {
+    echo json_encode(['success' => false, 'message' => 'Por favor, informe seu nome.']);
     exit;
 }
-if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['success' => false, 'message' => 'E-mail inválido.']);
-    exit;
-}
-if ($acompanhantes < 0 || $acompanhantes > 10) {
-    echo json_encode(['success' => false, 'message' => 'Número de acompanhantes inválido.']);
+if (strlen($codigo) < 4) {
+    echo json_encode(['success' => false, 'message' => 'Por favor, informe o código do convite.']);
     exit;
 }
 
 try {
     $db = getDB();
 
-    // Impede confirmação dupla pelo mesmo nome (tolerante a capitalização)
-    $dup = $db->prepare("SELECT id FROM confirmacoes WHERE LOWER(nome) = LOWER(?) LIMIT 1");
-    $dup->execute([$nome]);
-    if ($dup->fetch()) {
-        echo json_encode(['success' => false, 'message' => 'Já existe uma confirmação com esse nome. Se precisar alterar, entre em contato com os noivos.']);
+    // Verifica se as confirmações estão abertas
+    $aberta = $db->query("SELECT valor FROM configuracoes WHERE chave = 'confirmacao_aberta'")->fetchColumn();
+    if ($aberta !== '1') {
+        echo json_encode(['success' => false, 'message' => 'As confirmações ainda não estão abertas. Aguarde a divulgação dos noivos.']);
         exit;
     }
 
+    // Busca convidado pelo código (case-insensitive no nome)
     $stmt = $db->prepare(
-        "INSERT INTO confirmacoes (nome, email, telefone, acompanhantes, restricoes, mensagem)
-         VALUES (?, ?, ?, ?, ?, ?)"
+        "SELECT id, nome, confirmado FROM convidados WHERE codigo = ? LIMIT 1"
     );
-    $stmt->execute([$nome, $email ?: null, $telefone ?: null, $acompanhantes, $restricoes ?: null, $mensagem ?: null]);
+    $stmt->execute([$codigo]);
+    $convidado = $stmt->fetch();
 
-    $totalPax = (int) $db->query("SELECT COALESCE(SUM(acompanhantes + 1), 0) FROM confirmacoes")->fetchColumn();
+    if (!$convidado) {
+        echo json_encode(['success' => false, 'message' => 'Código de convite não encontrado. Verifique e tente novamente.']);
+        exit;
+    }
+
+    // Verifica se o nome bate (tolerante a capitalização e espaços extras)
+    $nomeConvidado = mb_strtolower(preg_replace('/\s+/', ' ', $convidado['nome']));
+    $nomeDigitado  = mb_strtolower(preg_replace('/\s+/', ' ', $nome));
+    if ($nomeConvidado !== $nomeDigitado) {
+        echo json_encode(['success' => false, 'message' => 'Nome não confere com o código do convite. Verifique os dados.']);
+        exit;
+    }
+
+    if ($convidado['confirmado']) {
+        echo json_encode(['success' => false, 'message' => 'Sua presença já foi confirmada anteriormente. Até lá! 💙']);
+        exit;
+    }
+
+    // Confirma presença
+    $db->prepare(
+        "UPDATE convidados SET confirmado = 1, confirmado_em = NOW() WHERE id = ?"
+    )->execute([$convidado['id']]);
+
+    $totalConf = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
 
     echo json_encode([
-        'success'   => true,
-        'message'   => 'Presença confirmada com sucesso! Mal podemos esperar para celebrar com você. 💙',
-        'total_pax' => $totalPax,
+        'success'    => true,
+        'message'    => 'Presença confirmada com sucesso! Mal podemos esperar para celebrar com você. 💙',
+        'total_conf' => $totalConf,
     ]);
 
 } catch (Exception $e) {

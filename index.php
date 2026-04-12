@@ -164,28 +164,28 @@ require_once ROOT_DIR . '/includes/_navbar.php';
 
             <div class="modulos-grid">
 
-                <a href="<?= BASE_URL ?>/pages/presentes.php" class="modulo-card hidden" data-animation="fadeInUp">
+                <a href="<?= BASE_URL ?>/presentes" class="modulo-card hidden" data-animation="fadeInUp">
                     <div class="modulo-icon"><i class="bi bi-gift"></i></div>
                     <p class="modulo-title">Lista de Presentes</p>
                     <p class="modulo-desc">Escolha um presente especial para nos ajudar a começar essa nova vida juntos.</p>
                     <span class="modulo-link">Ver presentes <i class="bi bi-arrow-right"></i></span>
                 </a>
 
-                <a href="<?= BASE_URL ?>/pages/local.php" class="modulo-card hidden" data-animation="fadeInUp">
+                <a href="<?= BASE_URL ?>/local" class="modulo-card hidden" data-animation="fadeInUp">
                     <div class="modulo-icon"><i class="bi bi-geo-alt"></i></div>
                     <p class="modulo-title">Local do Casamento</p>
                     <p class="modulo-desc">Saiba como chegar, estacionamento e todas as informações sobre o espaço.</p>
                     <span class="modulo-link">Ver local <i class="bi bi-arrow-right"></i></span>
                 </a>
 
-                <a href="<?= BASE_URL ?>/pages/confirmacao.php" class="modulo-card hidden" data-animation="fadeInUp">
+                <a href="<?= BASE_URL ?>/confirmacao" class="modulo-card hidden" data-animation="fadeInUp">
                     <div class="modulo-icon"><i class="bi bi-check-circle"></i></div>
                     <p class="modulo-title">Confirmar Presença</p>
                     <p class="modulo-desc">Confirme sua presença e a de seus acompanhantes para organizarmos tudo com carinho.</p>
                     <span class="modulo-link">Confirmar agora <i class="bi bi-arrow-right"></i></span>
                 </a>
 
-                <a href="<?= BASE_URL ?>/pages/mensagens.php" class="modulo-card hidden" data-animation="fadeInUp">
+                <a href="<?= BASE_URL ?>/mensagens" class="modulo-card hidden" data-animation="fadeInUp">
                     <div class="modulo-icon"><i class="bi bi-chat-heart"></i></div>
                     <p class="modulo-title">Mensagens aos Noivos</p>
                     <p class="modulo-desc">Deixe uma mensagem especial, um desejo ou uma lembrança para o casal.</p>

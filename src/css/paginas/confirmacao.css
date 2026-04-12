@@ -3,16 +3,16 @@
    ============================================================ */
 
 .conf-container {
-    padding-top: 48px;
+    padding-top: 52px;
     padding-bottom: 80px;
-    max-width: 760px;
+    max-width: 720px;
 }
 
 /* Contador de confirmados */
 .conf-counter {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
     background: linear-gradient(135deg, var(--blue2), var(--blue3));
     border-radius: var(--radius);
     padding: 20px 28px;
@@ -21,123 +21,157 @@
 }
 .conf-counter-icon {
     font-size: 2rem;
-    color: rgba(255,255,255,.9);
+    color: rgba(255,255,255,.85);
+    flex-shrink: 0;
 }
 .conf-counter-num {
     display: block;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: var(--white);
     line-height: 1;
 }
 .conf-counter-label {
     display: block;
-    font-size: .82rem;
-    color: rgba(255,255,255,.8);
-    margin-top: 2px;
+    font-size: .8rem;
+    color: rgba(255,255,255,.78);
+    margin-top: 3px;
 }
 
 /* Card do formulário */
 .conf-card {
-    background: var(--card-bg);
+    background: var(--white);
     border-radius: var(--radius);
     box-shadow: var(--shadow-md);
     overflow: hidden;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    border-top: 4px solid var(--blue4);
 }
 
+/* Header elegante (claro) */
 .conf-card-header {
-    background: linear-gradient(135deg, var(--blue1), var(--blue2));
-    padding: 32px 36px;
+    background: linear-gradient(180deg, var(--whiteblue5) 0%, var(--white) 100%);
+    padding: 36px 40px 28px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    border-bottom: 1px solid var(--whiteblue4);
 }
-.conf-card-header > i {
-    font-size: 2rem;
-    color: var(--blue6);
+
+.conf-card-header-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue2), var(--blue3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(20,71,118,.25);
+    margin-bottom: 4px;
 }
+.conf-card-header-icon i {
+    font-size: 1.6rem;
+    color: var(--white);
+}
+
 .conf-card-header h2 {
     font-family: var(--font-serif);
-    font-size: 1.5rem;
-    color: var(--white);
+    font-size: 1.55rem;
+    color: var(--blue1);
     margin: 0;
+    font-weight: 600;
 }
 .conf-card-header p {
-    font-size: .8rem;
-    color: var(--whiteblue3);
+    font-size: .82rem;
+    color: var(--blue4);
     margin: 0;
-    letter-spacing: .06em;
+    letter-spacing: .04em;
 }
 
 /* Formulário */
 #form-confirmacao {
-    padding: 32px 36px;
+    padding: 32px 40px 36px;
 }
 
+#conf-alert {
+    padding: 0 40px;
+}
+#conf-alert:empty { display: none; }
+
+/* Grade de dois campos lado a lado */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0 20px;
+    gap: 0 24px;
 }
 
-.label-hint {
-    font-size: .75rem;
-    color: var(--blue4);
-    font-weight: 400;
-    margin-left: 4px;
-}
-
-.textarea-custom {
-    resize: vertical;
-    min-height: 90px;
+/* Linha separadora entre grupos de campos */
+.form-section-divider {
+    height: 1px;
+    background: var(--whiteblue4);
+    margin: 8px 0 20px;
 }
 
 .conf-submit {
     width: 100%;
     justify-content: center;
-    padding: 14px 32px;
+    padding: 15px 32px;
     font-size: .95rem;
-    margin-top: 4px;
+    margin-top: 8px;
+    border-radius: 10px;
+    letter-spacing: .05em;
+    background: linear-gradient(135deg, var(--blue2), var(--blue3));
+    box-shadow: 0 4px 16px rgba(20,71,118,.2);
+}
+.conf-submit:hover {
+    background: linear-gradient(135deg, var(--blue1), var(--blue2));
+    box-shadow: 0 6px 24px rgba(20,71,118,.3);
+    transform: translateY(-2px);
 }
 
-/* Info */
+/* Info de prazo */
 .conf-info {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    background: rgba(78,139,184,.08);
-    border: 1px solid rgba(78,139,184,.2);
+    background: rgba(78,139,184,.07);
+    border: 1px solid rgba(78,139,184,.18);
     border-radius: var(--radius-sm);
-    padding: 16px 20px;
-    font-size: .85rem;
+    padding: 14px 18px;
+    font-size: .83rem;
     color: var(--blue2);
 }
 .conf-info > i {
-    font-size: 1.1rem;
-    color: var(--blue3);
+    font-size: 1rem;
+    color: var(--blue4);
     flex-shrink: 0;
     margin-top: 1px;
 }
 .conf-info p { margin: 0; line-height: 1.6; }
 
-/* Alert no topo do form */
-#conf-alert {
-    padding: 0 36px;
+/* Estado: confirmações fechadas */
+.conf-locked-body {
+    padding: 32px 40px 36px;
+    text-align: center;
+    color: var(--blue2);
+    font-size: .92rem;
+    line-height: 1.75;
 }
-#conf-alert:empty { display: none; }
+.conf-locked-body p { margin-bottom: 10px; }
 
 /* Responsividade */
 @media screen and (max-width: 768px) {
-    .form-row { grid-template-columns: 1fr; }
-    #form-confirmacao { padding: 24px 20px; }
-    .conf-card-header { padding: 24px 20px; }
-    #conf-alert { padding: 0 20px; }
+    #form-confirmacao { padding: 24px 24px 28px; }
+    .conf-locked-body { padding: 24px 24px 28px; }
+    .conf-card-header { padding: 28px 24px 22px; }
+    #conf-alert { padding: 0 24px; }
 }
 @media screen and (max-width: 576px) {
     .conf-container { padding-top: 32px; }
     .conf-counter { padding: 16px 18px; }
-    .conf-counter-num { font-size: 1.6rem; }
+    .conf-counter-num { font-size: 1.8rem; }
+    .conf-card-header-icon { width: 52px; height: 52px; }
+    .conf-card-header-icon i { font-size: 1.3rem; }
 }

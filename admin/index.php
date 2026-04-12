@@ -4,26 +4,26 @@ require_once ROOT_DIR . '/includes/db.php';
 
 session_start();
 if (!($_SESSION['admin_ok'] ?? false)) {
-    header('Location: ' . BASE_URL . '/admin/login.php');
+    header('Location: ' . BASE_URL . '/admin/login');
     exit;
 }
 
 try {
     $db = getDB();
 
-    $totalConf  = (int) $db->query("SELECT COUNT(*) FROM confirmacoes")->fetchColumn();
-    $totalPax   = (int) $db->query("SELECT COALESCE(SUM(acompanhantes + 1), 0) FROM confirmacoes")->fetchColumn();
-    $totalPres  = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
-    $comprados  = (int) $db->query("SELECT COUNT(*) FROM presentes WHERE comprado = 1")->fetchColumn();
-    $msgPend    = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 0")->fetchColumn();
-    $msgAprov   = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 1")->fetchColumn();
+    $totalConf     = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
+    $totalConv     = (int) $db->query("SELECT COUNT(*) FROM convidados")->fetchColumn();
+    $totalPres     = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
+    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM presentes_escolhas")->fetchColumn();
+    $msgPend       = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 0")->fetchColumn();
+    $msgAprov      = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 1")->fetchColumn();
 
     $confirmacoes = $db->query(
-        "SELECT id, nome, email, telefone, acompanhantes, restricoes, confirmado_em FROM confirmacoes ORDER BY confirmado_em DESC"
+        "SELECT id, nome, codigo, confirmado_em FROM convidados WHERE confirmado = 1 ORDER BY confirmado_em DESC"
     )->fetchAll();
 
 } catch (Exception $e) {
-    $totalConf = $totalPax = $totalPres = $comprados = $msgPend = $msgAprov = 0;
+    $totalConf = $totalConv = $totalPres = $totalEscolhas = $msgPend = $msgAprov = 0;
     $confirmacoes = [];
 }
 ?>
@@ -48,10 +48,10 @@ try {
         <?= NOIVA ?> &amp; <?= NOIVO ?> · Admin
     </div>
     <div style="display:flex;gap:16px;align-items:center;">
-        <a href="<?= BASE_URL ?>/index.php" target="_blank">
+        <a href="<?= BASE_URL ?>/" target="_blank">
             <i class="bi bi-eye"></i> Ver site
         </a>
-        <a href="<?= BASE_URL ?>/admin/logout.php">
+        <a href="<?= BASE_URL ?>/admin/logout">
             <i class="bi bi-box-arrow-right"></i> Sair
         </a>
     </div>
@@ -65,10 +65,10 @@ try {
     <!-- Stats -->
     <div class="admin-stats">
         <div class="stat-card">
-            <div class="stat-icon stat-icon--blue"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-icon stat-icon--blue"><i class="bi bi-person-lines-fill"></i></div>
             <div>
-                <span class="stat-num"><?= $totalPax ?></span>
-                <span class="stat-label">Pessoas confirmadas</span>
+                <span class="stat-num"><?= $totalConv ?></span>
+                <span class="stat-label">Total de convidados</span>
             </div>
         </div>
         <div class="stat-card">
@@ -81,8 +81,8 @@ try {
         <div class="stat-card">
             <div class="stat-icon stat-icon--blue"><i class="bi bi-gift-fill"></i></div>
             <div>
-                <span class="stat-num"><?= $comprados ?>/<?= $totalPres ?></span>
-                <span class="stat-label">Presentes escolhidos</span>
+                <span class="stat-num"><?= $totalEscolhas ?></span>
+                <span class="stat-label">Escolhas de presentes</span>
             </div>
         </div>
         <div class="stat-card">
@@ -96,15 +96,19 @@ try {
 
     <!-- Nav tabs -->
     <div class="admin-nav">
-        <a href="<?= BASE_URL ?>/admin/index.php"
+        <a href="<?= BASE_URL ?>/admin/index"
            class="admin-tab active">
             <i class="bi bi-people"></i> Confirmações (<?= $totalConf ?>)
         </a>
-        <a href="<?= BASE_URL ?>/admin/presentes.php"
+        <a href="<?= BASE_URL ?>/admin/convidados"
            class="admin-tab">
-            <i class="bi bi-gift"></i> Presentes (<?= $comprados ?>/<?= $totalPres ?>)
+            <i class="bi bi-person-lines-fill"></i> Convidados (<?= $totalConv ?>)
         </a>
-        <a href="<?= BASE_URL ?>/admin/mensagens.php"
+        <a href="<?= BASE_URL ?>/admin/presentes"
+           class="admin-tab">
+            <i class="bi bi-gift"></i> Presentes (<?= $totalPres ?>) · <?= $totalEscolhas ?> escolha<?= $totalEscolhas !== 1 ? 's' : '' ?>
+        </a>
+        <a href="<?= BASE_URL ?>/admin/mensagens"
            class="admin-tab">
             <i class="bi bi-chat-heart"></i> Mensagens
             <?php if ($msgPend > 0): ?>
@@ -126,9 +130,7 @@ try {
                 <tr>
                     <th>#</th>
                     <th>Nome</th>
-                    <th>Contato</th>
-                    <th>Acompanhantes</th>
-                    <th>Restrições</th>
+                    <th>Código</th>
                     <th>Confirmado em</th>
                 </tr>
             </thead>
@@ -137,19 +139,8 @@ try {
                 <tr>
                     <td style="color:var(--blue4);"><?= $i + 1 ?></td>
                     <td><strong><?= htmlspecialchars($c['nome']) ?></strong></td>
-                    <td>
-                        <?php if ($c['email']): ?>
-                        <div style="font-size:.82rem;"><?= htmlspecialchars($c['email']) ?></div>
-                        <?php endif; ?>
-                        <?php if ($c['telefone']): ?>
-                        <div style="font-size:.82rem;color:var(--blue4);"><?= htmlspecialchars($c['telefone']) ?></div>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <span class="badge-ok">+<?= (int)$c['acompanhantes'] ?> (<?= (int)$c['acompanhantes'] + 1 ?> total)</span>
-                    </td>
-                    <td style="font-size:.82rem;color:var(--blue4);">
-                        <?= $c['restricoes'] ? htmlspecialchars($c['restricoes']) : '—' ?>
+                    <td style="font-family:monospace;font-size:.88rem;letter-spacing:.08em;color:var(--blue3);">
+                        <?= htmlspecialchars($c['codigo']) ?>
                     </td>
                     <td style="font-size:.82rem;white-space:nowrap;color:var(--blue4);">
                         <?= (new DateTime($c['confirmado_em']))->format('d/m/Y H:i') ?>

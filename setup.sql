@@ -57,6 +57,43 @@ CREATE TABLE IF NOT EXISTS mensagens (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
+-- Escolhas de presentes (ilimitado — vários convidados por presente)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS presentes_escolhas (
+    id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    presente_id  INT UNSIGNED NOT NULL,
+    nome         VARCHAR(150) NOT NULL,
+    criado_em    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (presente_id) REFERENCES presentes(id) ON DELETE CASCADE,
+    INDEX idx_presente_id (presente_id),
+    INDEX idx_criado_em   (criado_em)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- Configurações gerais do sistema
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS configuracoes (
+    chave VARCHAR(50)  NOT NULL PRIMARY KEY,
+    valor VARCHAR(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT IGNORE INTO configuracoes (chave, valor) VALUES ('confirmacao_aberta', '0');
+
+-- --------------------------------------------------------
+-- Lista de convidados (gerada pelo admin)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS convidados (
+    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome          VARCHAR(150) NOT NULL,
+    codigo        VARCHAR(10)  NOT NULL,
+    confirmado    TINYINT(1)   NOT NULL DEFAULT 0,
+    confirmado_em DATETIME,
+    criado_em     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_codigo (codigo),
+    INDEX idx_confirmado (confirmado)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 -- Presentes de exemplo
 -- --------------------------------------------------------
 INSERT INTO presentes (nome, descricao, categoria, preco, link) VALUES

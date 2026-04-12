@@ -244,42 +244,7 @@
     gap: 10px;
 }
 
-/* Form inputs (global pra todas as páginas) */
-.form-group-custom {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 18px;
-}
-.form-group-custom label {
-    font-size: .85rem;
-    font-weight: 600;
-    color: var(--blue2);
-}
-.input-custom {
-    width: 100%;
-    padding: 11px 16px;
-    border: 1.5px solid var(--whiteblue3);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-base);
-    font-size: .9rem;
-    color: var(--blue1);
-    background: var(--white);
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    outline: none;
-}
-.input-custom:focus {
-    border-color: var(--blue4);
-    box-shadow: 0 0 0 3px rgba(78,139,184,.15);
-}
-.input-custom.is-invalid {
-    border-color: var(--status-no);
-}
-.input-error {
-    font-size: .78rem;
-    color: var(--status-no);
-    min-height: 18px;
-}
+/* Form inputs — definidos globalmente em estilo-padrão.css */
 
 /* Responsividade */
 @media screen and (max-width: 991px) {

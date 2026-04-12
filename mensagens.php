@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__) . '/config/config.php';
+require_once __DIR__ . '/config/config.php';
 require_once ROOT_DIR . '/includes/db.php';
 
 $pageTitle = 'Mensagens aos Noivos · ' . NOIVA . ' &amp; ' . NOIVO;
@@ -35,7 +35,9 @@ require_once ROOT_DIR . '/includes/_navbar.php';
         <div class="msg-form-card hidden" data-animation="fadeInUp">
 
             <div class="msg-form-header">
-                <i class="bi bi-pencil-heart"></i>
+                <div class="msg-form-header-icon">
+                    <i class="bi bi-heart"></i>
+                </div>
                 <h2>Escreva para o casal</h2>
                 <p>Sua mensagem será exibida após aprovação</p>
             </div>

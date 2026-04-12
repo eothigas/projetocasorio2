@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?= htmlspecialchars(NOIVA . ' &amp; ' . NOIVO . ' — ' . DIA_SEMANA . ', ' . DATA_BR) ?>">
+    <meta name="base-url" content="<?= BASE_URL ?>">
     <title><?= htmlspecialchars($pageTitle ?? (NOIVA . ' &amp; ' . NOIVO . ' · ' . DATA_BR)) ?></title>
 
     <!-- Favicon -->

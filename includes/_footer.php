@@ -12,11 +12,11 @@
         </div>
 
         <nav class="footer-nav">
-            <a href="<?= BASE_URL ?>/index.php">Início</a>
-            <a href="<?= BASE_URL ?>/pages/presentes.php">Presentes</a>
-            <a href="<?= BASE_URL ?>/pages/local.php">Local</a>
-            <a href="<?= BASE_URL ?>/pages/confirmacao.php">Confirmar Presença</a>
-            <a href="<?= BASE_URL ?>/pages/mensagens.php">Mensagens</a>
+            <a href="<?= BASE_URL ?>/">Início</a>
+            <a href="<?= BASE_URL ?>/presentes">Presentes</a>
+            <a href="<?= BASE_URL ?>/local">Local</a>
+            <a href="<?= BASE_URL ?>/confirmacao">Confirmar Presença</a>
+            <a href="<?= BASE_URL ?>/mensagens">Mensagens</a>
         </nav>
 
         <p class="footer-copy">
