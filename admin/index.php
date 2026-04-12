@@ -45,9 +45,9 @@ try {
 <div class="admin-topbar">
     <div class="admin-topbar-brand">
         <i class="bi bi-heart-fill"></i>
-        <?= NOIVA ?> &amp; <?= NOIVO ?> · Admin
+        <?= NOIVA ?> &amp; <?= NOIVO ?><span class="brand-label"> · Admin</span>
     </div>
-    <div style="display:flex;gap:16px;align-items:center;">
+    <div class="admin-topbar-actions">
         <a href="<?= BASE_URL ?>/" target="_blank">
             <i class="bi bi-eye"></i> Ver site
         </a>

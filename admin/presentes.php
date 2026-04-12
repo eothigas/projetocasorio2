@@ -69,11 +69,6 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/src/css/estilo-padrão.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/src/css/paginas/admin.css">
-    <style>
-        @media(max-width:768px) {
-            .form-grid, .form-grid-2 { grid-template-columns: 1fr; }
-        }
-    </style>
 </head>
 <body class="admin-body">
 
@@ -81,9 +76,9 @@ try {
 <div class="admin-topbar">
     <div class="admin-topbar-brand">
         <i class="bi bi-heart-fill"></i>
-        <?= NOIVA ?> &amp; <?= NOIVO ?> · Admin
+        <?= NOIVA ?> &amp; <?= NOIVO ?><span class="brand-label"> · Admin</span>
     </div>
-    <div style="display:flex;gap:16px;align-items:center;">
+    <div class="admin-topbar-actions">
         <a href="<?= BASE_URL ?>/" target="_blank"><i class="bi bi-eye"></i> Ver site</a>
         <a href="<?= BASE_URL ?>/admin/logout"><i class="bi bi-box-arrow-right"></i> Sair</a>
     </div>

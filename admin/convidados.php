@@ -76,88 +76,15 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/src/css/estilo-padrão.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/src/css/paginas/admin.css">
-    <style>
-        .toggle-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: .88rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
-        .toggle-status--open {
-            background: rgba(34,139,100,.1);
-            border: 1.5px solid rgba(34,139,100,.3);
-            color: #1a7a58;
-        }
-        .toggle-status--closed {
-            background: rgba(200,60,60,.08);
-            border: 1.5px solid rgba(200,60,60,.22);
-            color: #a03030;
-        }
-        .toggle-status i { font-size: 1.1rem; }
-        .btn-toggle-open {
-            background: linear-gradient(135deg, #228b64, #1a6e4f);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 20px;
-            font-size: .85rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-        }
-        .btn-toggle-open:hover { opacity: .88; }
-        .btn-toggle-close {
-            background: rgba(180,50,50,.1);
-            color: #a03030;
-            border: 1.5px solid rgba(180,50,50,.25);
-            border-radius: 8px;
-            padding: 8px 20px;
-            font-size: .85rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-        }
-        .btn-toggle-close:hover { background: rgba(180,50,50,.17); }
-        .code-badge {
-            font-family: monospace;
-            font-size: .95rem;
-            font-weight: 700;
-            letter-spacing: .12em;
-            background: var(--whiteblue5);
-            color: var(--blue2);
-            border: 1px solid var(--whiteblue3);
-            border-radius: 6px;
-            padding: 3px 10px;
-        }
-        .stat-mini { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-        .stat-mini-item {
-            background: var(--white);
-            border: 1px solid var(--whiteblue4);
-            border-radius: 10px;
-            padding: 12px 20px;
-            text-align: center;
-            min-width: 100px;
-        }
-        .stat-mini-num { display: block; font-size: 1.5rem; font-weight: 700; color: var(--blue2); }
-        .stat-mini-label { font-size: .72rem; color: var(--blue4); text-transform: uppercase; letter-spacing: .06em; }
-    </style>
 </head>
 <body class="admin-body">
 
 <div class="admin-topbar">
     <div class="admin-topbar-brand">
         <i class="bi bi-heart-fill"></i>
-        <?= NOIVA ?> &amp; <?= NOIVO ?> · Admin
+        <?= NOIVA ?> &amp; <?= NOIVO ?><span class="brand-label"> · Admin</span>
     </div>
-    <div style="display:flex;gap:16px;align-items:center;">
+    <div class="admin-topbar-actions">
         <a href="<?= BASE_URL ?>/" target="_blank"><i class="bi bi-eye"></i> Ver site</a>
         <a href="<?= BASE_URL ?>/admin/logout"><i class="bi bi-box-arrow-right"></i> Sair</a>
     </div>
@@ -187,7 +114,7 @@ try {
     </div>
 
     <!-- Status da confirmação + toggle -->
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+    <div class="toggle-wrap">
         <?php if ($confirmAberta === '1'): ?>
         <div class="toggle-status toggle-status--open">
             <i class="bi bi-unlock-fill"></i> Confirmações abertas ao público

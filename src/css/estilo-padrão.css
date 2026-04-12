@@ -339,14 +339,22 @@ textarea.input-custom {
 
 /* Responsividade global */
 @media screen and (max-width: 991px) {
-    .container {
-        padding: 0 16px;
-    }
+    .container { padding: 0 16px; }
+
+    .page-hero { padding: 90px 20px 48px; }
 }
+
+@media screen and (max-width: 768px) {
+    .page-hero { padding: 80px 16px 40px; }
+    .page-hero-icon { font-size: 2rem; margin-bottom: 8px; }
+}
+
 @media screen and (max-width: 576px) {
     .btn-primary-custom,
     .btn-outline-custom {
         width: 100%;
         justify-content: center;
     }
+    .page-hero { padding: 76px 16px 36px; }
+    .page-hero h1 { font-size: clamp(2rem, 10vw, 3rem); }
 }

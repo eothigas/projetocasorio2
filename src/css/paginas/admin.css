@@ -7,13 +7,16 @@ body.admin-body {
     min-height: 100vh;
 }
 
-/* Topbar admin */
+/* ============================================================
+   TOPBAR
+   ============================================================ */
 .admin-topbar {
     background: var(--blue1);
     padding: 14px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -26,8 +29,18 @@ body.admin-body {
     color: var(--white);
     font-weight: 600;
     font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
-.admin-topbar-brand i { color: var(--blue5); font-size: 1.2rem; }
+.admin-topbar-brand i { color: var(--blue5); font-size: 1.2rem; flex-shrink: 0; }
+.admin-topbar-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-shrink: 0;
+}
 .admin-topbar a {
     color: var(--whiteblue4);
     font-size: .85rem;
@@ -35,17 +48,22 @@ body.admin-body {
     align-items: center;
     gap: 6px;
     transition: color 0.2s;
+    white-space: nowrap;
 }
 .admin-topbar a:hover { color: var(--white); }
 
-/* Layout */
+/* ============================================================
+   LAYOUT
+   ============================================================ */
 .admin-main {
     padding: 32px 24px 60px;
     max-width: 1100px;
     margin: 0 auto;
 }
 
-/* Stats cards */
+/* ============================================================
+   STATS CARDS
+   ============================================================ */
 .admin-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -89,16 +107,51 @@ body.admin-body {
     margin-top: 2px;
 }
 
-/* Nav tabs admin */
+/* Mini stats (convidados) */
+.stat-mini {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.stat-mini-item {
+    background: var(--white);
+    border: 1px solid var(--whiteblue4);
+    border-radius: 10px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 90px;
+    flex: 1;
+}
+.stat-mini-num {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--blue2);
+}
+.stat-mini-label {
+    font-size: .72rem;
+    color: var(--blue4);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+/* ============================================================
+   NAV TABS ADMIN
+   ============================================================ */
 .admin-nav {
     display: flex;
     gap: 4px;
     margin-bottom: 24px;
     border-bottom: 2px solid var(--whiteblue4);
     padding-bottom: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
+.admin-nav::-webkit-scrollbar { display: none; }
 .admin-tab {
-    padding: 10px 20px;
+    padding: 10px 18px;
     font-size: .88rem;
     font-weight: 500;
     color: var(--blue4);
@@ -112,6 +165,9 @@ body.admin-body {
     gap: 6px;
     margin-bottom: -2px;
     border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-decoration: none;
 }
 .admin-tab:hover { color: var(--blue2); }
 .admin-tab.active {
@@ -120,17 +176,24 @@ body.admin-body {
     font-weight: 600;
 }
 
-/* Tabelas */
+/* ============================================================
+   TABELAS
+   ============================================================ */
 .admin-table-wrap {
     background: var(--card-bg);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
 }
+.admin-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 .admin-table {
     width: 100%;
     border-collapse: collapse;
     font-size: .86rem;
+    min-width: 540px;
 }
 .admin-table th {
     background: var(--blue1);
@@ -141,6 +204,7 @@ body.admin-body {
     font-size: .78rem;
     letter-spacing: .06em;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 .admin-table td {
     padding: 12px 16px;
@@ -151,11 +215,15 @@ body.admin-body {
 .admin-table tr:last-child td { border-bottom: none; }
 .admin-table tr:hover td { background: var(--whiteblue5); }
 
-/* Badges de status */
-.badge-ok    { background: rgba(46,158,91,.12);  color: var(--status-ok);   padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; }
-.badge-pend  { background: rgba(232,160,32,.12); color: var(--status-pend); padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; }
+/* ============================================================
+   BADGES DE STATUS
+   ============================================================ */
+.badge-ok   { background: rgba(46,158,91,.12);  color: var(--status-ok);   padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; white-space: nowrap; }
+.badge-pend { background: rgba(232,160,32,.12); color: var(--status-pend); padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; white-space: nowrap; }
 
-/* Botões de ação da tabela */
+/* ============================================================
+   BOTÕES DE AÇÃO DA TABELA
+   ============================================================ */
 .btn-action {
     padding: 5px 12px;
     border-radius: var(--radius-xs);
@@ -168,20 +236,25 @@ body.admin-body {
     align-items: center;
     gap: 4px;
     text-decoration: none;
+    white-space: nowrap;
 }
-.btn-action--approve { background: rgba(46,158,91,.12);  color: var(--status-ok);   border: 1px solid rgba(46,158,91,.3); }
+.btn-action--approve { background: rgba(46,158,91,.12);  color: var(--status-ok);  border: 1px solid rgba(46,158,91,.3); }
 .btn-action--approve:hover { background: var(--status-ok); color: #fff; }
-.btn-action--delete  { background: rgba(192,57,43,.08);  color: var(--status-no);   border: 1px solid rgba(192,57,43,.3); }
+.btn-action--delete  { background: rgba(192,57,43,.08);  color: var(--status-no);  border: 1px solid rgba(192,57,43,.3); }
 .btn-action--delete:hover  { background: var(--status-no); color: #fff; }
 
-/* Inputs no admin (herdam os globais; ajustes específicos) */
+/* ============================================================
+   INPUTS NO ADMIN
+   ============================================================ */
 .admin-body .input-custom {
     font-size: .88rem;
     padding: 10px 14px;
     border-radius: 8px;
 }
 
-/* Formulário de adicionar presente */
+/* ============================================================
+   FORMULÁRIO ADICIONAR (presentes / convidados)
+   ============================================================ */
 .form-add-present {
     background: var(--white);
     border-radius: var(--radius);
@@ -190,7 +263,6 @@ body.admin-body {
     margin-bottom: 28px;
     border-top: 4px solid var(--blue3);
 }
-
 .form-add-present-header {
     background: linear-gradient(180deg, var(--whiteblue5) 0%, var(--white) 100%);
     padding: 18px 24px 14px;
@@ -199,10 +271,7 @@ body.admin-body {
     align-items: center;
     gap: 10px;
 }
-.form-add-present-header i {
-    font-size: 1.1rem;
-    color: var(--blue3);
-}
+.form-add-present-header i { font-size: 1.1rem; color: var(--blue3); }
 .form-add-present-header h4 {
     font-family: var(--font-serif);
     color: var(--blue2);
@@ -210,32 +279,10 @@ body.admin-body {
     margin: 0;
     font-weight: 600;
 }
+.form-add-present-body { padding: 22px 24px 24px; }
 
-.form-add-present-body {
-    padding: 22px 24px 24px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.form-grid-2 {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.form-add-present .form-group-custom {
-    margin-bottom: 0;
-}
-
-.form-add-present .form-group-custom label {
-    font-size: .68rem;
-}
+.form-add-present .form-group-custom { margin-bottom: 0; }
+.form-add-present .form-group-custom label { font-size: .68rem; }
 
 .btn-add-present {
     padding: 10px 28px !important;
@@ -243,7 +290,96 @@ body.admin-body {
     border-radius: 8px !important;
 }
 
-/* Login */
+/* Grids do formulário de presentes */
+.form-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+/* ============================================================
+   TOGGLE DE CONFIRMAÇÃO (convidados)
+   ============================================================ */
+.toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.toggle-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: .88rem;
+    font-weight: 600;
+}
+.toggle-status i { font-size: 1.1rem; }
+.toggle-status--open {
+    background: rgba(34,139,100,.1);
+    border: 1.5px solid rgba(34,139,100,.3);
+    color: #1a7a58;
+}
+.toggle-status--closed {
+    background: rgba(200,60,60,.08);
+    border: 1.5px solid rgba(200,60,60,.22);
+    color: #a03030;
+}
+.btn-toggle-open {
+    background: linear-gradient(135deg, #228b64, #1a6e4f);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-toggle-open:hover { opacity: .88; }
+.btn-toggle-close {
+    background: rgba(180,50,50,.1);
+    color: #a03030;
+    border: 1.5px solid rgba(180,50,50,.25);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-toggle-close:hover { background: rgba(180,50,50,.17); }
+
+/* Badge de código */
+.code-badge {
+    font-family: monospace;
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    background: var(--whiteblue5);
+    color: var(--blue2);
+    border: 1px solid var(--whiteblue3);
+    border-radius: 6px;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
 .admin-login-wrap {
     min-height: 100vh;
     display: flex;
@@ -277,9 +413,7 @@ body.admin-body {
     color: var(--blue4);
     margin: 0;
 }
-.admin-login-card-body {
-    padding: 28px 36px 36px;
-}
+.admin-login-card-body { padding: 28px 36px 36px; }
 .admin-login-btn {
     width: 100%;
     justify-content: center;
@@ -294,18 +428,69 @@ body.admin-body {
     box-shadow: 0 6px 20px rgba(20,71,118,.3) !important;
 }
 
-/* Responsividade admin */
-@media screen and (max-width: 768px) {
-    .admin-stats { grid-template-columns: 1fr 1fr; }
-    .admin-table-wrap { overflow-x: auto; }
-    .admin-table { min-width: 600px; }
-    .form-add-present-body { padding: 18px 16px 20px; }
-    .form-add-present-header { padding: 14px 16px; }
+/* ============================================================
+   RESPONSIVIDADE ADMIN
+   ============================================================ */
+
+/* Tablet (≤ 991px) */
+@media screen and (max-width: 991px) {
+    .admin-stats { grid-template-columns: repeat(2, 1fr); }
+    .form-grid   { grid-template-columns: 1fr 1fr; }
+    .form-grid-2 { grid-template-columns: 1fr; }
 }
+
+/* Mobile (≤ 768px) */
+@media screen and (max-width: 768px) {
+    .admin-main { padding: 20px 16px 48px; }
+    .admin-topbar { padding: 10px 16px; }
+    .admin-topbar-brand { font-size: .88rem; }
+    .admin-topbar-brand .brand-label { display: none; } /* esconde " · Admin" no mobile */
+    .admin-topbar a { font-size: .8rem; gap: 4px; }
+    .admin-topbar-actions { gap: 12px; }
+
+    .admin-tab { padding: 9px 12px; font-size: .82rem; }
+
+    .admin-table-wrap { border-radius: var(--radius-sm); }
+    .admin-table-wrap > table,
+    .admin-table { min-width: 480px; }
+
+    /* Scroll horizontal na tabela */
+    .admin-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .form-add-present-body { padding: 16px 16px 18px; }
+    .form-add-present-header { padding: 12px 16px; }
+    .form-grid, .form-grid-2 { grid-template-columns: 1fr; }
+
+    .btn-add-present { width: 100%; justify-content: center; }
+
+    .toggle-wrap { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .btn-toggle-open, .btn-toggle-close { width: 100%; justify-content: center; }
+
+    .stat-mini { gap: 10px; }
+    .stat-mini-item { padding: 10px 14px; }
+    .stat-mini-num { font-size: 1.3rem; }
+}
+
+/* Pequeno (≤ 576px) */
 @media screen and (max-width: 576px) {
-    .admin-stats { grid-template-columns: 1fr; }
-    .admin-main  { padding: 20px 12px 40px; }
-    .admin-login-card-header { padding: 28px 24px 18px; }
-    .admin-login-card-body { padding: 22px 24px 28px; }
+    .admin-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-card { padding: 14px 14px; gap: 10px; }
+    .stat-icon { width: 40px; height: 40px; font-size: 1.1rem; }
+    .stat-num { font-size: 1.35rem; }
+    .stat-label { font-size: .7rem; }
+
+    .admin-tab { padding: 8px 10px; font-size: .78rem; }
+
+    .admin-login-card-header { padding: 28px 20px 18px; }
+    .admin-login-card-body { padding: 22px 20px 28px; }
     .admin-login-card-header h1 { font-size: 2rem; }
+}
+
+/* Muito pequeno (≤ 400px) */
+@media screen and (max-width: 400px) {
+    .admin-stats { grid-template-columns: 1fr; }
+    .admin-topbar-brand .topbar-name { display: none; }
 }

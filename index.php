@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config/config.php';
 
-$pageTitle = NOIVA . ' &amp; ' . NOIVO . ' · ' . DATA_BR;
+$pageTitle = NOIVA . ' e ' . NOIVO . ' · ' . DATA_BR;
 $pageCSS   = ['home.css'];
 $pageJS    = ['home.js'];
 
@@ -124,12 +124,13 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                         <span class="convite-info-label">Dia</span>
                         <span class="convite-info-value"><?= DIA_SEMANA ?></span>
                     </div>
-                    <div class="convite-info-sep"></div>
-                    <div class="convite-info-col">
+                    <div class="convite-info-col" style="
+                        border-left: 2px solid var(--blue1);
+                        border-right: 2px solid var(--blue1);
+                    ">
                         <span class="convite-info-label"><?= MES ?> · <?= ANO ?></span>
                         <span class="convite-info-value big"><?= DIA ?></span>
                     </div>
-                    <div class="convite-info-sep"></div>
                     <div class="convite-info-col">
                         <span class="convite-info-label">Horário</span>
                         <span class="convite-info-value"><?= HORA ?></span>

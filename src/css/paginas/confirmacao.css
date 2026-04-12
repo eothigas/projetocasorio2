@@ -163,8 +163,11 @@
 
 /* Responsividade */
 @media screen and (max-width: 768px) {
-    #form-confirmacao { padding: 24px 24px 28px; }
-    .conf-locked-body { padding: 24px 24px 28px; }
+    .conf-container { padding-top: 36px; }
+    #form-confirmacao { padding: 24px 20px 28px; }
+    #conf-alert { padding: 0 20px; }
+    .conf-card-header { padding: 28px 20px 22px; }
+    .conf-locked-body { padding: 24px 20px 28px; }
     .conf-card-header { padding: 28px 24px 22px; }
     #conf-alert { padding: 0 24px; }
 }
