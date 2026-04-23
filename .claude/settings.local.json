@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from PIL import Image; img = Image.open\\(r'c:\\\\xampp\\\\htdocs\\\\_pessoal\\\\projetocasorio2\\\\images\\\\slider\\\\ban-site.png'\\); print\\(img.size\\)\")",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\"c:\\\\xampp\\\\htdocs\\\\_pessoal\\\\projetocasorio2\\\\images\\\\slider\\\\ban-site.png\"\\); \"$\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\))"
+    ]
+  }
+}

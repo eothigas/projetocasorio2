@@ -64,4 +64,4 @@ define('ROOT_DIR', dirname(__DIR__));
 // BASE_URL: caminho web base (sem trailing slash)
 // Ex: '/_Dev/projetocasorio2' ou '' se estiver na raiz do servidor
 // === URLs ===
-define('BASE_URL', $isLocal ? '/_Dev/projetocasorio2' : '/casamento');
+define('BASE_URL', $isLocal ? '/_pessoal/projetocasorio2' : '/casamento');

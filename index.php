@@ -22,9 +22,11 @@ require_once ROOT_DIR . '/includes/_navbar.php';
             </p>
 
             <h1 class="hero-names hidden" data-animation="fadeInUp">
-                <?= NOIVA ?><br>&amp;<br><?= NOIVO ?>
+                <?= NOIVA ?> &amp; <?= NOIVO ?>
             </h1>
 
+            <p class="hero-pre hidden">CONVIDAM PARA SEU CASAMENTO</p>
+            
             <div class="hero-divider hidden" data-animation="fadeInUp">
                 <span></span>
                 <i class="bi bi-heart-fill"></i>
@@ -105,11 +107,9 @@ require_once ROOT_DIR . '/includes/_navbar.php';
 
             <div class="convite-card hidden" data-animation="fadeInUp">
 
-                <p class="convite-pre">Convite de Casamento</p>
-
                 <h2 class="convite-names">
-                    <?= NOIVA ?><br>
-                    <span style="font-size:1.6rem;color:var(--blue4);">&amp;</span><br>
+                    <?= NOIVA ?> 
+                    <span style="font-size:1.6rem;color:var(--blue4);">&amp;</span> 
                     <?= NOIVO ?>
                 </h2>
 

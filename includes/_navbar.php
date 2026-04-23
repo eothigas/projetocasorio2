@@ -11,8 +11,8 @@ function navActive(string $page, string $current): string {
     <div class="container">
 
         <!-- Logo -->
-        <a class="navbar-brand" href="<?= BASE_URL ?>/">
-            <span class="brand-names"><?= NOIVA ?> <i class="bi bi-heart-fill brand-heart"></i> <?= NOIVO ?></span>
+        <a class="navbar-brand align-items-center text-center" href="<?= BASE_URL ?>/">
+            <span class="brand-names"><?= NOIVA ?>  &AMP;  <?= NOIVO ?></span>
             <span class="brand-date"><?= DATA_BR ?></span>
         </a>
 
