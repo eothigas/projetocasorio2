@@ -8,19 +8,6 @@ if (!($_SESSION['admin_ok'] ?? false)) {
     exit;
 }
 
-function gerarCodigo(PDO $db): string {
-    $chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // sem caracteres ambíguos
-    do {
-        $code = '';
-        for ($i = 0; $i < 6; $i++) {
-            $code .= $chars[random_int(0, strlen($chars) - 1)];
-        }
-        $existe = $db->prepare("SELECT id FROM convidados WHERE codigo = ? LIMIT 1");
-        $existe->execute([$code]);
-    } while ($existe->fetch());
-    return $code;
-}
-
 // Ações POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
@@ -29,9 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($acao === 'adicionar') {
             $nome = trim(strip_tags($_POST['nome'] ?? ''));
             if (strlen($nome) >= 2) {
-                $codigo = gerarCodigo($db);
-                $db->prepare("INSERT INTO convidados (nome, codigo) VALUES (?, ?)")
-                   ->execute([$nome, $codigo]);
+                $db->prepare("INSERT INTO convidados (nome) VALUES (?)")
+                   ->execute([$nome]);
             }
         } elseif ($acao === 'excluir') {
             $id = (int) ($_POST['id'] ?? 0);
@@ -170,13 +156,9 @@ try {
                            placeholder="Nome completo" required maxlength="150">
                 </div>
                 <button type="submit" class="btn-primary-custom" style="white-space:nowrap;">
-                    <i class="bi bi-plus-lg"></i> Adicionar e gerar código
+                    <i class="bi bi-plus-lg"></i> Adicionar
                 </button>
             </form>
-            <p style="font-size:.78rem;color:var(--blue4);margin-top:10px;margin-bottom:0;">
-                <i class="bi bi-info-circle me-1"></i>
-                O código é gerado automaticamente e deve ser enviado ao convidado no convite.
-            </p>
         </div>
     </div>
 
@@ -193,7 +175,6 @@ try {
                 <tr>
                     <th>#</th>
                     <th>Nome</th>
-                    <th>Código</th>
                     <th>Status</th>
                     <th>Confirmado em</th>
                     <th>Ações</th>
@@ -204,7 +185,6 @@ try {
                 <tr>
                     <td style="color:var(--blue4);"><?= $i + 1 ?></td>
                     <td><strong><?= htmlspecialchars($c['nome']) ?></strong></td>
-                    <td><span class="code-badge"><?= htmlspecialchars($c['codigo']) ?></span></td>
                     <td>
                         <?php if ($c['confirmado']): ?>
                         <span class="badge-ok"><i class="bi bi-check-circle-fill me-1"></i>Confirmado</span>

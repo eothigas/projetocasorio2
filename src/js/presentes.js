@@ -33,7 +33,7 @@
         btnConfirmar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Aguarde...';
 
         try {
-            const resp = await fetch(BASE_URL + '/api/presente.php', {
+            const resp = await fetch(BASE_URL + '/api/presente', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ id: presenteId.value, nome }),

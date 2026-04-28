@@ -17,15 +17,10 @@ if (!$body) {
     exit;
 }
 
-$nome   = trim(strip_tags($body['nome']   ?? ''));
-$codigo = strtoupper(trim(strip_tags($body['codigo'] ?? '')));
+$nome = trim(strip_tags($body['nome'] ?? ''));
 
 if (strlen($nome) < 2) {
     echo json_encode(['success' => false, 'message' => 'Por favor, informe seu nome.']);
-    exit;
-}
-if (strlen($codigo) < 4) {
-    echo json_encode(['success' => false, 'message' => 'Por favor, informe o código do convite.']);
     exit;
 }
 
@@ -39,23 +34,21 @@ try {
         exit;
     }
 
-    // Busca convidado pelo código (case-insensitive no nome)
-    $stmt = $db->prepare(
-        "SELECT id, nome, confirmado FROM convidados WHERE codigo = ? LIMIT 1"
-    );
-    $stmt->execute([$codigo]);
-    $convidado = $stmt->fetch();
+    // Busca convidado pelo nome (tolerante a capitalização e espaços extras)
+    $nomeNormalizado = mb_strtolower(preg_replace('/\s+/', ' ', $nome));
 
-    if (!$convidado) {
-        echo json_encode(['success' => false, 'message' => 'Código de convite não encontrado. Verifique e tente novamente.']);
-        exit;
+    $stmt = $db->query("SELECT id, nome, confirmado FROM convidados");
+    $convidado = null;
+    foreach ($stmt->fetchAll() as $c) {
+        $nomeDB = mb_strtolower(preg_replace('/\s+/', ' ', $c['nome']));
+        if ($nomeDB === $nomeNormalizado) {
+            $convidado = $c;
+            break;
+        }
     }
 
-    // Verifica se o nome bate (tolerante a capitalização e espaços extras)
-    $nomeConvidado = mb_strtolower(preg_replace('/\s+/', ' ', $convidado['nome']));
-    $nomeDigitado  = mb_strtolower(preg_replace('/\s+/', ' ', $nome));
-    if ($nomeConvidado !== $nomeDigitado) {
-        echo json_encode(['success' => false, 'message' => 'Nome não confere com o código do convite. Verifique os dados.']);
+    if (!$convidado) {
+        echo json_encode(['success' => false, 'message' => 'Nome não encontrado na lista de convidados. Verifique e tente novamente.']);
         exit;
     }
 

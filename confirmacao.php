@@ -43,9 +43,8 @@ require_once ROOT_DIR . '/includes/_navbar.php';
             </div>
             <div class="conf-locked-body">
                 <p>
-                    Assim que as confirmações estiverem disponíveis, você receberá
-                    um convite com seu <strong>código de acesso</strong> para confirmar
-                    sua presença aqui.
+                    Assim que as confirmações estiverem disponíveis, você poderá
+                    confirmar sua presença aqui com seu nome.
                 </p>
                 <p style="margin-bottom:0;">
                     Fique atento às novidades! 💙
@@ -75,7 +74,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                     <i class="bi bi-envelope-heart"></i>
                 </div>
                 <h2>Confirme sua presença</h2>
-                <p>Use o código que recebeu no seu convite</p>
+                <p>Digite seu nome completo como está na lista de convidados</p>
             </div>
 
             <div id="conf-alert"></div>
@@ -90,17 +89,6 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                     <span class="input-error" id="err-nome"></span>
                 </div>
 
-                <div class="form-group-custom">
-                    <label for="conf-codigo">Código do convite *</label>
-                    <input type="text" id="conf-codigo" name="codigo"
-                           class="input-custom input-codigo"
-                           placeholder="Ex.: AB3K7M"
-                           required maxlength="10"
-                           autocomplete="off"
-                           style="letter-spacing:.18em;text-transform:uppercase;font-family:monospace;font-size:1.1rem;">
-                    <span class="input-error" id="err-codigo"></span>
-                </div>
-
                 <button type="submit" class="btn-primary-custom conf-submit" id="btn-confirmar">
                     <i class="bi bi-check-circle-fill"></i>
                     <span>Confirmar minha presença</span>
@@ -113,7 +101,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
         <div class="conf-info hidden" data-animation="fadeInUp">
             <i class="bi bi-info-circle"></i>
             <p>
-                O código está no seu convite impresso ou digital. Em caso de dúvidas,
+                Digite seu nome exatamente como foi cadastrado no convite. Em caso de dúvidas,
                 entre em contato com os noivos.
             </p>
         </div>

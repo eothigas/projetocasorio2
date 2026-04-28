@@ -61,7 +61,7 @@
         };
 
         try {
-            const resp = await fetch(BASE_URL + '/api/mensagem.php', {
+            const resp = await fetch(BASE_URL + '/api/mensagem', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify(payload),
