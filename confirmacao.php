@@ -74,7 +74,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                     <i class="bi bi-envelope-heart"></i>
                 </div>
                 <h2>Confirme sua presença</h2>
-                <p>Digite seu nome completo como está na lista de convidados</p>
+                <p>Digite seu nome completo como está na lista de convidados. Se você for responsável por um grupo, poderá confirmar por todos em seguida.</p>
             </div>
 
             <div id="conf-alert"></div>
@@ -95,6 +95,8 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                 </button>
 
             </form>
+
+            <div id="conf-grupo" class="hidden"></div>
 
         </div>
 

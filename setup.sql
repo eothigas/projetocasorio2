@@ -80,17 +80,34 @@ CREATE TABLE IF NOT EXISTS configuracoes (
 INSERT IGNORE INTO configuracoes (chave, valor) VALUES ('confirmacao_aberta', '0');
 
 -- --------------------------------------------------------
+-- Grupos/famílias de convidados (1 responsável recebe o
+-- convite e confirma pelos dependentes do grupo)
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS grupos (
+    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome_grupo    VARCHAR(150) NOT NULL,
+    respondido    TINYINT(1)   NOT NULL DEFAULT 0,
+    respondido_em DATETIME,
+    criado_em     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_respondido (respondido)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 -- Lista de convidados (gerada pelo admin)
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS convidados (
     id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nome          VARCHAR(150) NOT NULL,
+    grupo_id      INT UNSIGNED NOT NULL,
+    responsavel   TINYINT(1)   NOT NULL DEFAULT 0,
     codigo        VARCHAR(10)  NOT NULL,
     confirmado    TINYINT(1)   NOT NULL DEFAULT 0,
     confirmado_em DATETIME,
     criado_em     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_codigo (codigo),
-    INDEX idx_confirmado (confirmado)
+    FOREIGN KEY (grupo_id) REFERENCES grupos(id) ON DELETE CASCADE,
+    INDEX idx_confirmado (confirmado),
+    INDEX idx_grupo_id (grupo_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

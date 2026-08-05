@@ -17,12 +17,7 @@ if (!$body) {
     exit;
 }
 
-$nome = trim(strip_tags($body['nome'] ?? ''));
-
-if (strlen($nome) < 2) {
-    echo json_encode(['success' => false, 'message' => 'Por favor, informe seu nome.']);
-    exit;
-}
+$acao = $body['acao'] ?? 'buscar';
 
 try {
     $db = getDB();
@@ -34,41 +29,118 @@ try {
         exit;
     }
 
-    // Busca convidado pelo nome (tolerante a capitalização e espaços extras)
-    $nomeNormalizado = mb_strtolower(preg_replace('/\s+/', ' ', $nome));
+    if ($acao === 'buscar') {
+        $nome = trim(strip_tags($body['nome'] ?? ''));
 
-    $stmt = $db->query("SELECT id, nome, confirmado FROM convidados");
-    $convidado = null;
-    foreach ($stmt->fetchAll() as $c) {
-        $nomeDB = mb_strtolower(preg_replace('/\s+/', ' ', $c['nome']));
-        if ($nomeDB === $nomeNormalizado) {
-            $convidado = $c;
-            break;
+        if (strlen($nome) < 2) {
+            echo json_encode(['success' => false, 'message' => 'Por favor, informe seu nome.']);
+            exit;
         }
-    }
 
-    if (!$convidado) {
-        echo json_encode(['success' => false, 'message' => 'Nome não encontrado na lista de convidados. Verifique e tente novamente.']);
+        // Busca convidado pelo nome (tolerante a capitalização e espaços extras)
+        $nomeNormalizado = mb_strtolower(preg_replace('/\s+/', ' ', $nome));
+
+        $stmt = $db->query("SELECT id, nome, grupo_id FROM convidados");
+        $convidado = null;
+        foreach ($stmt->fetchAll() as $c) {
+            $nomeDB = mb_strtolower(preg_replace('/\s+/', ' ', $c['nome']));
+            if ($nomeDB === $nomeNormalizado) {
+                $convidado = $c;
+                break;
+            }
+        }
+
+        if (!$convidado) {
+            echo json_encode(['success' => false, 'message' => 'Nome não encontrado na lista de convidados. Verifique e tente novamente.']);
+            exit;
+        }
+
+        $grupo = $db->prepare("SELECT id, nome_grupo, respondido FROM grupos WHERE id = ?");
+        $grupo->execute([$convidado['grupo_id']]);
+        $grupo = $grupo->fetch();
+
+        if ($grupo['respondido']) {
+            echo json_encode(['success' => false, 'message' => 'A presença do seu grupo já foi confirmada anteriormente. Até lá! 💙']);
+            exit;
+        }
+
+        $membrosStmt = $db->prepare(
+            "SELECT id, nome, responsavel FROM convidados WHERE grupo_id = ? ORDER BY responsavel DESC, id ASC"
+        );
+        $membrosStmt->execute([$grupo['id']]);
+
+        echo json_encode([
+            'success'    => true,
+            'grupo_id'   => (int) $grupo['id'],
+            'nome_grupo' => $grupo['nome_grupo'],
+            'membros'    => array_map(fn($m) => [
+                'id'          => (int) $m['id'],
+                'nome'        => $m['nome'],
+                'responsavel' => (bool) $m['responsavel'],
+            ], $membrosStmt->fetchAll()),
+        ]);
         exit;
     }
 
-    if ($convidado['confirmado']) {
-        echo json_encode(['success' => false, 'message' => 'Sua presença já foi confirmada anteriormente. Até lá! 💙']);
+    if ($acao === 'confirmar') {
+        $grupoId   = (int) ($body['grupo_id'] ?? 0);
+        $respostas = $body['respostas'] ?? [];
+
+        if ($grupoId <= 0 || !is_array($respostas) || empty($respostas)) {
+            echo json_encode(['success' => false, 'message' => 'Dados inválidos.']);
+            exit;
+        }
+
+        $grupoStmt = $db->prepare("SELECT id, respondido FROM grupos WHERE id = ?");
+        $grupoStmt->execute([$grupoId]);
+        $grupo = $grupoStmt->fetch();
+
+        if (!$grupo) {
+            echo json_encode(['success' => false, 'message' => 'Grupo não encontrado.']);
+            exit;
+        }
+
+        if ($grupo['respondido']) {
+            echo json_encode(['success' => false, 'message' => 'A presença do seu grupo já foi confirmada anteriormente. Até lá! 💙']);
+            exit;
+        }
+
+        $membrosStmt = $db->prepare("SELECT id FROM convidados WHERE grupo_id = ?");
+        $membrosStmt->execute([$grupoId]);
+        $idsGrupo = array_map('intval', array_column($membrosStmt->fetchAll(), 'id'));
+
+        $idsRespostas = array_map(fn($r) => (int) ($r['id'] ?? 0), $respostas);
+        sort($idsGrupo);
+        sort($idsRespostas);
+
+        if ($idsGrupo !== $idsRespostas) {
+            echo json_encode(['success' => false, 'message' => 'É necessário responder por todos os integrantes do grupo.']);
+            exit;
+        }
+
+        $update = $db->prepare("UPDATE convidados SET confirmado = ?, confirmado_em = ? WHERE id = ? AND grupo_id = ?");
+        foreach ($respostas as $r) {
+            $id  = (int) ($r['id'] ?? 0);
+            $vai = !empty($r['vai']);
+            $update->execute([$vai ? 1 : 0, $vai ? date('Y-m-d H:i:s') : null, $id, $grupoId]);
+        }
+
+        $db->prepare("UPDATE grupos SET respondido = 1, respondido_em = NOW() WHERE id = ?")->execute([$grupoId]);
+
+        $totalConf = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
+        $confGrupo = count(array_filter($respostas, fn($r) => !empty($r['vai'])));
+
+        echo json_encode([
+            'success'     => true,
+            'message'     => 'Presença confirmada com sucesso! Mal podemos esperar para celebrar com você. 💙',
+            'total_conf'  => $totalConf,
+            'conf_grupo'  => $confGrupo,
+            'total_grupo' => count($respostas),
+        ]);
         exit;
     }
 
-    // Confirma presença
-    $db->prepare(
-        "UPDATE convidados SET confirmado = 1, confirmado_em = NOW() WHERE id = ?"
-    )->execute([$convidado['id']]);
-
-    $totalConf = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
-
-    echo json_encode([
-        'success'    => true,
-        'message'    => 'Presença confirmada com sucesso! Mal podemos esperar para celebrar com você. 💙',
-        'total_conf' => $totalConf,
-    ]);
+    echo json_encode(['success' => false, 'message' => 'Ação inválida.']);
 
 } catch (Exception $e) {
     http_response_code(500);

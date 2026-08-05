@@ -378,6 +378,43 @@ body.admin-body {
 }
 
 /* ============================================================
+   GRUPOS DE CONVIDADOS
+   ============================================================ */
+.grupo-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.grupo-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    background: linear-gradient(180deg, var(--whiteblue5) 0%, var(--white) 100%);
+    border-bottom: 1px solid var(--whiteblue4);
+    flex-wrap: wrap;
+}
+.grupo-card-header strong {
+    color: var(--blue1);
+    font-size: .95rem;
+    margin-right: 10px;
+}
+.grupo-add-dependente {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 18px;
+    flex-wrap: wrap;
+}
+.grupo-add-dependente .input-custom {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* ============================================================
    LOGIN
    ============================================================ */
 .admin-login-wrap {

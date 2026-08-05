@@ -26,8 +26,11 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/src/css/elementos/footer.css">
 
     <!-- CSS da Página -->
-    <?php foreach ($pageCSS ?? [] as $css): ?>
-    <link rel="stylesheet" href="<?= BASE_URL . '/src/css/paginas/' . htmlspecialchars($css) ?>">
+    <?php foreach ($pageCSS ?? [] as $css):
+        $cssPath = ROOT_DIR . '/src/css/paginas/' . $css;
+        $cssV    = is_file($cssPath) ? filemtime($cssPath) : time();
+    ?>
+    <link rel="stylesheet" href="<?= BASE_URL . '/src/css/paginas/' . htmlspecialchars($css) . '?v=' . $cssV ?>">
     <?php endforeach; ?>
 </head>
 <body>

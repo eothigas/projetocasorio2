@@ -8,21 +8,43 @@ if (!($_SESSION['admin_ok'] ?? false)) {
     exit;
 }
 
+function gerarCodigo(): string {
+    return strtoupper(substr(bin2hex(random_bytes(5)), 0, 8));
+}
+
 // Ações POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
     try {
         $db = getDB();
-        if ($acao === 'adicionar') {
-            $nome = trim(strip_tags($_POST['nome'] ?? ''));
-            if (strlen($nome) >= 2) {
-                $db->prepare("INSERT INTO convidados (nome) VALUES (?)")
-                   ->execute([$nome]);
+        if ($acao === 'criar_grupo') {
+            $nomeResp  = trim(strip_tags($_POST['nome_responsavel'] ?? ''));
+            $nomeGrupo = trim(strip_tags($_POST['nome_grupo'] ?? ''));
+            if ($nomeGrupo === '') {
+                $nomeGrupo = $nomeResp;
             }
-        } elseif ($acao === 'excluir') {
+            if (strlen($nomeResp) >= 2) {
+                $db->prepare("INSERT INTO grupos (nome_grupo) VALUES (?)")->execute([$nomeGrupo]);
+                $grupoId = (int) $db->lastInsertId();
+                $db->prepare("INSERT INTO convidados (nome, grupo_id, responsavel, codigo) VALUES (?, ?, 1, ?)")
+                   ->execute([$nomeResp, $grupoId, gerarCodigo()]);
+            }
+        } elseif ($acao === 'add_dependente') {
+            $grupoId = (int) ($_POST['grupo_id'] ?? 0);
+            $nome    = trim(strip_tags($_POST['nome'] ?? ''));
+            if ($grupoId > 0 && strlen($nome) >= 2) {
+                $db->prepare("INSERT INTO convidados (nome, grupo_id, responsavel, codigo) VALUES (?, ?, 0, ?)")
+                   ->execute([$nome, $grupoId, gerarCodigo()]);
+            }
+        } elseif ($acao === 'excluir_membro') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id > 0) {
-                $db->prepare("DELETE FROM convidados WHERE id = ?")->execute([$id]);
+                $db->prepare("DELETE FROM convidados WHERE id = ? AND responsavel = 0")->execute([$id]);
+            }
+        } elseif ($acao === 'excluir_grupo') {
+            $grupoId = (int) ($_POST['grupo_id'] ?? 0);
+            if ($grupoId > 0) {
+                $db->prepare("DELETE FROM grupos WHERE id = ?")->execute([$grupoId]);
             }
         } elseif ($acao === 'toggle') {
             $atual = $db->query("SELECT valor FROM configuracoes WHERE chave = 'confirmacao_aberta'")->fetchColumn();
@@ -35,18 +57,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 try {
-    $db         = getDB();
-    $convidados = $db->query("SELECT * FROM convidados ORDER BY criado_em DESC")->fetchAll();
-    $totalConv  = count($convidados);
-    $totalConf  = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
-    $totalPend  = $totalConv - $totalConf;
+    $db = getDB();
+
+    $grupos = $db->query("SELECT * FROM grupos ORDER BY criado_em DESC")->fetchAll();
+    $membrosPorGrupo = [];
+    $membrosStmt = $db->query("SELECT * FROM convidados ORDER BY responsavel DESC, id ASC");
+    foreach ($membrosStmt->fetchAll() as $m) {
+        $membrosPorGrupo[$m['grupo_id']][] = $m;
+    }
+
+    $totalConv = (int) $db->query("SELECT COUNT(*) FROM convidados")->fetchColumn();
+    $totalConf = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
+    $totalPend = $totalConv - $totalConf;
     $confirmAberta = $db->query("SELECT valor FROM configuracoes WHERE chave = 'confirmacao_aberta'")->fetchColumn();
 
     $totalPres     = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
     $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM presentes_escolhas")->fetchColumn();
     $msgPend       = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 0")->fetchColumn();
 } catch (Exception $e) {
-    $convidados = [];
+    $grupos = [];
+    $membrosPorGrupo = [];
     $totalConv = $totalConf = $totalPend = $totalPres = $totalEscolhas = $msgPend = 0;
     $confirmAberta = '0';
 }
@@ -141,78 +171,119 @@ try {
         </div>
     </div>
 
-    <!-- Formulário: adicionar convidado -->
+    <!-- Formulário: criar grupo -->
     <div class="form-add-present" style="margin-bottom:24px;">
         <div class="form-add-present-header">
             <i class="bi bi-person-plus-fill"></i>
-            <h4>Adicionar Convidado</h4>
+            <h4>Novo Grupo / Convidado</h4>
         </div>
         <div class="form-add-present-body">
             <form method="POST" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
-                <input type="hidden" name="acao" value="adicionar">
-                <div class="form-group-custom" style="flex:1;min-width:220px;margin-bottom:0;">
-                    <label>Nome do convidado *</label>
-                    <input type="text" name="nome" class="input-custom"
-                           placeholder="Nome completo" required maxlength="150">
+                <input type="hidden" name="acao" value="criar_grupo">
+                <div class="form-group-custom" style="flex:1;min-width:200px;margin-bottom:0;">
+                    <label>Nome do responsável *</label>
+                    <input type="text" name="nome_responsavel" class="input-custom"
+                           placeholder="Quem recebe o convite" required maxlength="150">
+                </div>
+                <div class="form-group-custom" style="flex:1;min-width:200px;margin-bottom:0;">
+                    <label>Nome do grupo (opcional)</label>
+                    <input type="text" name="nome_grupo" class="input-custom"
+                           placeholder="Ex: Família Silva" maxlength="150">
                 </div>
                 <button type="submit" class="btn-primary-custom" style="white-space:nowrap;">
-                    <i class="bi bi-plus-lg"></i> Adicionar
+                    <i class="bi bi-plus-lg"></i> Criar grupo
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Tabela de convidados -->
+    <!-- Grupos -->
+    <?php if (empty($grupos)): ?>
     <div class="admin-table-wrap">
-        <?php if (empty($convidados)): ?>
         <div style="padding:40px;text-align:center;color:var(--blue4);">
             <i class="bi bi-person-lines-fill" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
-            Nenhum convidado cadastrado ainda.
+            Nenhum grupo cadastrado ainda.
         </div>
-        <?php else: ?>
+    </div>
+    <?php else: ?>
+    <?php foreach ($grupos as $g): $membros = $membrosPorGrupo[$g['id']] ?? []; ?>
+    <div class="grupo-card">
+        <div class="grupo-card-header">
+            <div>
+                <strong><?= htmlspecialchars($g['nome_grupo']) ?></strong>
+                <?php if ($g['respondido']): ?>
+                <span class="badge-ok"><i class="bi bi-check-circle-fill me-1"></i>Respondido</span>
+                <?php else: ?>
+                <span class="badge-pend"><i class="bi bi-clock me-1"></i>Aguardando</span>
+                <?php endif; ?>
+            </div>
+            <form method="POST" style="display:inline;"
+                  onsubmit="return confirm('Excluir o grupo <?= htmlspecialchars(addslashes($g['nome_grupo'])) ?> e todos os seus integrantes?')">
+                <input type="hidden" name="acao" value="excluir_grupo">
+                <input type="hidden" name="grupo_id" value="<?= $g['id'] ?>">
+                <button type="submit" class="btn-action btn-action--delete">
+                    <i class="bi bi-trash"></i> Excluir grupo
+                </button>
+            </form>
+        </div>
+
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Nome</th>
+                    <th>Papel</th>
                     <th>Status</th>
                     <th>Confirmado em</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($convidados as $i => $c): ?>
+                <?php foreach ($membros as $m): ?>
                 <tr>
-                    <td style="color:var(--blue4);"><?= $i + 1 ?></td>
-                    <td><strong><?= htmlspecialchars($c['nome']) ?></strong></td>
+                    <td><strong><?= htmlspecialchars($m['nome']) ?></strong></td>
+                    <td><?= $m['responsavel'] ? '<span class="badge-pend">Responsável</span>' : 'Dependente' ?></td>
                     <td>
-                        <?php if ($c['confirmado']): ?>
-                        <span class="badge-ok"><i class="bi bi-check-circle-fill me-1"></i>Confirmado</span>
+                        <?php if (!$g['respondido']): ?>
+                        <span class="badge-pend"><i class="bi bi-clock me-1"></i>Aguardando</span>
+                        <?php elseif ($m['confirmado']): ?>
+                        <span class="badge-ok"><i class="bi bi-check-circle-fill me-1"></i>Vai comparecer</span>
                         <?php else: ?>
-                        <span class="badge-pend"><i class="bi bi-clock me-1"></i>Pendente</span>
+                        <span class="badge-pend"><i class="bi bi-x-circle me-1"></i>Não vai</span>
                         <?php endif; ?>
                     </td>
                     <td style="font-size:.8rem;white-space:nowrap;color:var(--blue4);">
-                        <?= $c['confirmado_em']
-                            ? (new DateTime($c['confirmado_em']))->format('d/m/Y H:i')
+                        <?= $m['confirmado_em']
+                            ? (new DateTime($m['confirmado_em']))->format('d/m/Y H:i')
                             : '—' ?>
                     </td>
                     <td>
+                        <?php if (!$m['responsavel']): ?>
                         <form method="POST" style="display:inline;"
-                              onsubmit="return confirm('Excluir o convidado <?= htmlspecialchars(addslashes($c['nome'])) ?>?')">
-                            <input type="hidden" name="acao" value="excluir">
-                            <input type="hidden" name="id" value="<?= $c['id'] ?>">
+                              onsubmit="return confirm('Excluir o dependente <?= htmlspecialchars(addslashes($m['nome'])) ?>?')">
+                            <input type="hidden" name="acao" value="excluir_membro">
+                            <input type="hidden" name="id" value="<?= $m['id'] ?>">
                             <button type="submit" class="btn-action btn-action--delete">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </form>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <?php endif; ?>
+
+        <form method="POST" class="grupo-add-dependente">
+            <input type="hidden" name="acao" value="add_dependente">
+            <input type="hidden" name="grupo_id" value="<?= $g['id'] ?>">
+            <input type="text" name="nome" class="input-custom" placeholder="Nome do dependente" required maxlength="150">
+            <button type="submit" class="btn-primary-custom">
+                <i class="bi bi-plus-lg"></i> Adicionar dependente
+            </button>
+        </form>
     </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

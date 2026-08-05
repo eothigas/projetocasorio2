@@ -372,8 +372,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="<?= BASE_URL ?>/src/js/base.js"></script>
-<?php foreach ($pageJS ?? [] as $js): ?>
-<script src="<?= BASE_URL . '/src/js/' . htmlspecialchars($js) ?>"></script>
+<?php foreach ($pageJS ?? [] as $js):
+    $jsPath = ROOT_DIR . '/src/js/' . $js;
+    $jsV    = is_file($jsPath) ? filemtime($jsPath) : time();
+?>
+<script src="<?= BASE_URL . '/src/js/' . htmlspecialchars($js) . '?v=' . $jsV ?>"></script>
 <?php endforeach; ?>
 </body>
 </html>

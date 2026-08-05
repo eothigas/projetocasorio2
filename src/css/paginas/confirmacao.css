@@ -131,6 +131,71 @@
     transform: translateY(-2px);
 }
 
+/* Lista de membros do grupo (passo 2) */
+#conf-grupo {
+    padding: 0 40px 36px;
+}
+.conf-grupo-hint {
+    font-size: .85rem;
+    color: var(--blue4);
+    margin: 0 0 14px;
+}
+.conf-membros-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+.conf-membro-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--whiteblue5);
+    border: 1px solid var(--whiteblue4);
+    border-radius: var(--radius-sm);
+    padding: 13px 16px;
+    flex-wrap: wrap;
+}
+.conf-membro-nome {
+    font-size: .92rem;
+    color: var(--blue1);
+    font-weight: 500;
+}
+.conf-membro-item em {
+    color: var(--blue4);
+    font-style: normal;
+    font-size: .8rem;
+}
+
+.conf-membro-opcoes {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+.conf-opt {
+    border: 1.5px solid var(--whiteblue3);
+    background: var(--white);
+    color: var(--blue3);
+    font-size: .82rem;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.conf-opt:hover { border-color: var(--blue3); }
+.conf-opt-sim.active {
+    background: var(--status-ok, #2e9e5b);
+    border-color: var(--status-ok, #2e9e5b);
+    color: var(--white);
+}
+.conf-opt-nao.active {
+    background: var(--status-no, #c0392b);
+    border-color: var(--status-no, #c0392b);
+    color: var(--white);
+}
+
 /* Info de prazo */
 .conf-info {
     display: flex;
@@ -165,6 +230,7 @@
 @media screen and (max-width: 768px) {
     .conf-container { padding-top: 36px; }
     #form-confirmacao { padding: 24px 20px 28px; }
+    #conf-grupo { padding: 0 20px 28px; }
     #conf-alert { padding: 0 20px; }
     .conf-card-header { padding: 28px 20px 22px; }
     .conf-locked-body { padding: 24px 20px 28px; }
