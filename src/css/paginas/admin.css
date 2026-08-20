@@ -57,7 +57,7 @@ body.admin-body {
    ============================================================ */
 .admin-main {
     padding: 32px 24px 60px;
-    max-width: 1100px;
+    max-width: 1320px;
     margin: 0 auto;
 }
 
@@ -135,6 +135,163 @@ body.admin-body {
     text-transform: uppercase;
     letter-spacing: .06em;
 }
+
+/* ============================================================
+   LAYOUT COM GUIA LATERAL (conteúdo + sidebar de ajuda à direita)
+   ============================================================ */
+.admin-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 28px;
+    align-items: start;
+}
+.admin-content { min-width: 0; }
+
+/* ============================================================
+   GUIA RÁPIDO (auto-ajuda lateral por página)
+   ============================================================ */
+.admin-guide {
+    position: sticky;
+    top: 88px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--blue3);
+    overflow: hidden;
+}
+.admin-guide-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px 12px;
+    background: linear-gradient(180deg, var(--whiteblue5) 0%, var(--white) 100%);
+    border-bottom: 1px solid var(--whiteblue4);
+}
+.admin-guide-header i { font-size: 1.15rem; color: var(--blue3); }
+.admin-guide-header h4 {
+    font-family: var(--font-serif);
+    color: var(--blue2);
+    font-size: .95rem;
+    margin: 0;
+    font-weight: 600;
+}
+.admin-guide-body {
+    padding: 16px 20px 20px;
+    font-size: .81rem;
+    color: var(--blue3);
+    line-height: 1.65;
+}
+.admin-guide-body p { margin: 0 0 12px; }
+.admin-guide-body p:last-child { margin-bottom: 0; }
+.admin-guide-body strong { color: var(--blue1); }
+.admin-guide-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: guide-step;
+}
+.admin-guide-steps li {
+    counter-increment: guide-step;
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid var(--whiteblue4);
+    font-size: .8rem;
+    color: var(--blue3);
+    line-height: 1.5;
+}
+.admin-guide-steps li:first-child { border-top: none; padding-top: 0; }
+.admin-guide-steps li::before {
+    counter-increment: none;
+    content: counter(guide-step);
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(78,139,184,.12);
+    color: var(--blue3);
+    font-size: .7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+}
+
+/* Guia legado (empilhado no topo) — mantido por compatibilidade */
+.admin-help {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(78,139,184,.08);
+    border: 1px solid rgba(78,139,184,.22);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    font-size: .84rem;
+    color: var(--blue2);
+    line-height: 1.55;
+}
+.admin-help i {
+    font-size: 1.1rem;
+    color: var(--blue3);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.admin-help strong { color: var(--blue1); }
+
+/* ============================================================
+   CHECKLIST DE TAREFAS (dashboard)
+   ============================================================ */
+.admin-checklist {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 4px 0;
+    margin-bottom: 28px;
+    overflow: hidden;
+}
+.admin-checklist-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 22px 12px;
+}
+.admin-checklist-header i { font-size: 1.1rem; color: var(--blue3); }
+.admin-checklist-header h4 {
+    font-family: var(--font-serif);
+    color: var(--blue2);
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 600;
+    flex: 1;
+}
+.admin-checklist-progress {
+    font-size: .76rem;
+    color: var(--blue4);
+    font-weight: 600;
+}
+.admin-checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 22px;
+    border-top: 1px solid var(--whiteblue4);
+    font-size: .86rem;
+    color: var(--blue2);
+    text-decoration: none;
+    transition: var(--transition);
+}
+.admin-checklist-item:hover { background: var(--whiteblue5); }
+.admin-checklist-item i.item-check {
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+.admin-checklist-item--done i.item-check { color: var(--status-ok); }
+.admin-checklist-item--pending i.item-check { color: var(--whiteblue3); }
+.admin-checklist-item--done .item-text { color: var(--blue4); text-decoration: line-through; }
+.admin-checklist-item .item-text { flex: 1; }
+.admin-checklist-item .item-arrow { color: var(--blue4); font-size: .8rem; }
 
 /* ============================================================
    NAV TABS ADMIN
@@ -220,6 +377,7 @@ body.admin-body {
    ============================================================ */
 .badge-ok   { background: rgba(46,158,91,.12);  color: var(--status-ok);   padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; white-space: nowrap; }
 .badge-pend { background: rgba(232,160,32,.12); color: var(--status-pend); padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; white-space: nowrap; }
+.badge-off  { background: rgba(120,120,120,.12); color: #777; padding: 3px 10px; border-radius: 50px; font-size:.75rem; font-weight:600; white-space: nowrap; }
 
 /* ============================================================
    BOTÕES DE AÇÃO DA TABELA
@@ -303,6 +461,33 @@ body.admin-body {
     gap: 12px;
     margin-bottom: 16px;
 }
+
+/* ============================================================
+   SEÇÕES DE FORMULÁRIO (nome, categoria, preço agrupados;
+   link/imagem agrupados; descrição por último — com título e
+   ícone por bloco, separadas por linha fina)
+   ============================================================ */
+.admin-form-section {
+    padding: 18px 0;
+    border-top: 1px dashed var(--whiteblue4);
+}
+.admin-form-section:first-child {
+    padding-top: 0;
+    border-top: none;
+}
+.admin-form-section:last-of-type { padding-bottom: 4px; }
+.admin-form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--blue4);
+    margin: 0 0 14px;
+}
+.admin-form-section-title i { font-size: .9rem; color: var(--blue5); }
 
 /* ============================================================
    TOGGLE DE CONFIRMAÇÃO (convidados)
@@ -474,6 +659,10 @@ body.admin-body {
     .admin-stats { grid-template-columns: repeat(2, 1fr); }
     .form-grid   { grid-template-columns: 1fr 1fr; }
     .form-grid-2 { grid-template-columns: 1fr; }
+
+    .admin-layout   { grid-template-columns: 1fr; }
+    .admin-content  { order: 1; }
+    .admin-guide    { order: 2; position: static; }
 }
 
 /* Mobile (≤ 768px) */

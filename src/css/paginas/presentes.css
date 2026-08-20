@@ -108,6 +108,10 @@
 
 /* Badge */
 .pres-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
     display: inline-flex;
     align-items: center;
     font-size: .7rem;
@@ -115,31 +119,72 @@
     letter-spacing: .06em;
     padding: 4px 12px;
     border-radius: 50px;
-    align-self: flex-start;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
 }
 .pres-badge--done {
-    background: rgba(46, 158, 91, .12);
+    background: var(--white, #fff);
     color: var(--status-ok);
-    border: 1px solid rgba(46, 158, 91, .25);
+    border: 1px solid rgba(46, 158, 91, .3);
 }
 .pres-badge--open {
-    background: rgba(78, 139, 184, .1);
+    background: var(--white, #fff);
     color: var(--blue3);
-    border: 1px solid rgba(78, 139, 184, .25);
+    border: 1px solid rgba(78, 139, 184, .3);
 }
 
-/* Ícone do card */
+/* Progresso de cota */
+.pres-cota-progress {
+    margin-top: 6px;
+}
+.pres-cota-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 50px;
+    background: rgba(78, 139, 184, .12);
+    overflow: hidden;
+}
+.pres-cota-fill {
+    height: 100%;
+    background: var(--status-ok, #2e9e5b);
+    border-radius: 50px;
+    transition: width .3s ease;
+}
+.pres-cota-label {
+    display: block;
+    font-size: .72rem;
+    color: var(--blue4);
+    margin-top: 4px;
+}
+
+/* Foto do card (ou ícone de fallback quando não há foto) */
+.pres-card-media {
+    width: calc(100% + 48px);
+    height: 180px;
+    margin: -24px -24px 0;
+    border-radius: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--whiteblue5);
+}
+.pres-card-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    box-sizing: border-box;
+    padding: 14px;
+}
 .pres-card-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(135deg, var(--whiteblue4), var(--whiteblue3));
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .pres-card-icon i {
-    font-size: 1.4rem;
+    font-size: 2rem;
     color: var(--blue3);
 }
 

@@ -29,7 +29,7 @@ try {
     $msgs = $db->query("SELECT * FROM mensagens ORDER BY aprovado ASC, criado_em DESC")->fetchAll();
     $totalConf = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
     $totalPres     = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
-    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM presentes_escolhas")->fetchColumn();
+    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM reservas WHERE status = 'pago'")->fetchColumn();
     $msgPend   = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 0")->fetchColumn();
 } catch (Exception $e) {
     $msgs = [];
@@ -63,7 +63,10 @@ try {
 
 <div class="admin-main">
 
-    <h2 style="font-family:var(--font-serif);color:var(--blue2);margin-bottom:24px;">Mensagens dos Convidados</h2>
+    <h2 style="font-family:var(--font-serif);color:var(--blue2);margin-bottom:20px;">Mensagens dos Convidados</h2>
+
+    <div class="admin-layout">
+    <div class="admin-content">
 
     <!-- Nav tabs -->
     <div class="admin-nav">
@@ -81,6 +84,9 @@ try {
             <?php if ($msgPend > 0): ?>
             <span class="badge-pend"><?= $msgPend ?> pendente<?= $msgPend > 1 ? 's' : '' ?></span>
             <?php endif; ?>
+        </a>
+        <a href="<?= BASE_URL ?>/admin/configuracoes" class="admin-tab">
+            <i class="bi bi-gear"></i> Configurações
         </a>
     </div>
 
@@ -145,6 +151,24 @@ try {
         </table>
         <?php endif; ?>
     </div>
+
+    </div><!-- /.admin-content -->
+
+    <aside class="admin-guide">
+        <div class="admin-guide-header">
+            <i class="bi bi-lightbulb-fill"></i>
+            <h4>Guia rápido</h4>
+        </div>
+        <div class="admin-guide-body">
+            <p>Mensagens enviadas pelos convidados ficam pendentes até você aprovar.</p>
+            <ol class="admin-guide-steps">
+                <li>Revise o texto na tabela.</li>
+                <li><strong>Aprovar</strong> publica a mensagem no mural do site público.</li>
+                <li><strong>Excluir</strong> remove a mensagem permanentemente.</li>
+            </ol>
+        </div>
+    </aside>
+    </div><!-- /.admin-layout -->
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

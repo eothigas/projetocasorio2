@@ -72,7 +72,7 @@ try {
     $confirmAberta = $db->query("SELECT valor FROM configuracoes WHERE chave = 'confirmacao_aberta'")->fetchColumn();
 
     $totalPres     = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
-    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM presentes_escolhas")->fetchColumn();
+    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM reservas WHERE status = 'pago'")->fetchColumn();
     $msgPend       = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 0")->fetchColumn();
 } catch (Exception $e) {
     $grupos = [];
@@ -108,7 +108,10 @@ try {
 
 <div class="admin-main">
 
-    <h2 style="font-family:var(--font-serif);color:var(--blue2);margin-bottom:24px;">Lista de Convidados</h2>
+    <h2 style="font-family:var(--font-serif);color:var(--blue2);margin-bottom:20px;">Lista de Convidados</h2>
+
+    <div class="admin-layout">
+    <div class="admin-content">
 
     <!-- Nav tabs -->
     <div class="admin-nav">
@@ -126,6 +129,9 @@ try {
             <?php if ($msgPend > 0): ?>
             <span class="badge-pend"><?= $msgPend ?> pendente<?= $msgPend > 1 ? 's' : '' ?></span>
             <?php endif; ?>
+        </a>
+        <a href="<?= BASE_URL ?>/admin/configuracoes" class="admin-tab">
+            <i class="bi bi-gear"></i> Configurações
         </a>
     </div>
 
@@ -178,19 +184,24 @@ try {
             <h4>Novo Grupo / Convidado</h4>
         </div>
         <div class="form-add-present-body">
-            <form method="POST" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+            <form method="POST">
                 <input type="hidden" name="acao" value="criar_grupo">
-                <div class="form-group-custom" style="flex:1;min-width:200px;margin-bottom:0;">
-                    <label>Nome do responsável *</label>
-                    <input type="text" name="nome_responsavel" class="input-custom"
-                           placeholder="Quem recebe o convite" required maxlength="150">
+                <div class="admin-form-section">
+                    <h5 class="admin-form-section-title"><i class="bi bi-person-fill"></i> Responsável pelo convite</h5>
+                    <div class="form-grid-2">
+                        <div class="form-group-custom">
+                            <label>Nome do responsável *</label>
+                            <input type="text" name="nome_responsavel" class="input-custom"
+                                   placeholder="Quem recebe o convite" required maxlength="150">
+                        </div>
+                        <div class="form-group-custom">
+                            <label>Nome do grupo (opcional)</label>
+                            <input type="text" name="nome_grupo" class="input-custom"
+                                   placeholder="Ex: Família Silva" maxlength="150">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group-custom" style="flex:1;min-width:200px;margin-bottom:0;">
-                    <label>Nome do grupo (opcional)</label>
-                    <input type="text" name="nome_grupo" class="input-custom"
-                           placeholder="Ex: Família Silva" maxlength="150">
-                </div>
-                <button type="submit" class="btn-primary-custom" style="white-space:nowrap;">
+                <button type="submit" class="btn-primary-custom btn-add-present">
                     <i class="bi bi-plus-lg"></i> Criar grupo
                 </button>
             </form>
@@ -284,6 +295,26 @@ try {
     </div>
     <?php endforeach; ?>
     <?php endif; ?>
+
+    </div><!-- /.admin-content -->
+
+    <aside class="admin-guide">
+        <div class="admin-guide-header">
+            <i class="bi bi-lightbulb-fill"></i>
+            <h4>Guia rápido</h4>
+        </div>
+        <div class="admin-guide-body">
+            <p>Cadastre grupos/famílias e os convidados de cada um. Cada convidado recebe
+            um código único pra confirmar presença no site.</p>
+            <ol class="admin-guide-steps">
+                <li>Crie o grupo informando o nome de quem recebe o convite.</li>
+                <li>Adicione dependentes dentro do card do grupo.</li>
+                <li>Use o toggle acima pra abrir/fechar a confirmação publicamente.</li>
+                <li>O código gerado pra cada convidado é único e serve pra confirmar presença.</li>
+            </ol>
+        </div>
+    </aside>
+    </div><!-- /.admin-layout -->
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

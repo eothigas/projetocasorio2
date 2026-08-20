@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/config/config.php';
 require_once ROOT_DIR . '/includes/db.php';
+require_once ROOT_DIR . '/includes/mp-config.php';
 
 session_start();
 if (!($_SESSION['admin_ok'] ?? false)) {
@@ -14,7 +15,7 @@ try {
     $totalConf     = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
     $totalConv     = (int) $db->query("SELECT COUNT(*) FROM convidados")->fetchColumn();
     $totalPres     = (int) $db->query("SELECT COUNT(*) FROM presentes")->fetchColumn();
-    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM presentes_escolhas")->fetchColumn();
+    $totalEscolhas = (int) $db->query("SELECT COUNT(*) FROM reservas WHERE status = 'pago'")->fetchColumn();
     $msgPend       = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 0")->fetchColumn();
     $msgAprov      = (int) $db->query("SELECT COUNT(*) FROM mensagens WHERE aprovado = 1")->fetchColumn();
 
@@ -22,10 +23,45 @@ try {
         "SELECT id, nome, codigo, confirmado_em FROM convidados WHERE confirmado = 1 ORDER BY confirmado_em DESC"
     )->fetchAll();
 
+    $confirmacaoAberta = $db->query("SELECT valor FROM configuracoes WHERE chave = 'confirmacao_aberta'")->fetchColumn() === '1';
+    $mpConfigurado     = getMpAccessToken() !== '';
+
 } catch (Exception $e) {
     $totalConf = $totalConv = $totalPres = $totalEscolhas = $msgPend = $msgAprov = 0;
     $confirmacoes = [];
+    $confirmacaoAberta = false;
+    $mpConfigurado     = false;
 }
+
+// Checklist de tarefas de configuração inicial
+$tarefas = [
+    [
+        'feito' => $totalConv > 0,
+        'texto' => 'Importar/cadastrar a lista de convidados',
+        'link'  => BASE_URL . '/admin/convidados',
+    ],
+    [
+        'feito' => $confirmacaoAberta,
+        'texto' => 'Abrir a confirmação de presença pros convidados',
+        'link'  => BASE_URL . '/admin/convidados',
+    ],
+    [
+        'feito' => $totalPres > 0,
+        'texto' => 'Cadastrar presentes na lista',
+        'link'  => BASE_URL . '/admin/presentes',
+    ],
+    [
+        'feito' => $mpConfigurado,
+        'texto' => 'Configurar o Access Token do Mercado Pago (Pix)',
+        'link'  => BASE_URL . '/admin/configuracoes',
+    ],
+    [
+        'feito' => $msgPend === 0,
+        'texto' => 'Revisar mensagens pendentes de aprovação',
+        'link'  => BASE_URL . '/admin/mensagens',
+    ],
+];
+$tarefasFeitas = count(array_filter($tarefas, fn($t) => $t['feito']));
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -59,8 +95,29 @@ try {
 
 <div class="admin-main">
 
-    <h2 style="font-family:var(--font-serif);color:var(--blue2);margin-bottom:8px;">Painel</h2>
-    <p style="color:var(--blue4);font-size:.88rem;margin-bottom:24px;"><?= DATA_BR ?> · <?= DIA_SEMANA ?></p>
+    <h2 style="font-family:var(--font-serif);color:var(--blue2);margin-bottom:4px;">Painel</h2>
+    <p style="color:var(--blue4);font-size:.88rem;margin-bottom:20px;"><?= DATA_BR ?> · <?= DIA_SEMANA ?></p>
+
+    <div class="admin-layout">
+    <div class="admin-content">
+
+    <!-- Checklist de tarefas -->
+    <div class="admin-checklist">
+        <div class="admin-checklist-header">
+            <i class="bi bi-list-check"></i>
+            <h4>Próximos passos</h4>
+            <span class="admin-checklist-progress"><?= $tarefasFeitas ?>/<?= count($tarefas) ?> concluídas</span>
+        </div>
+        <?php foreach ($tarefas as $t): ?>
+        <a href="<?= $t['link'] ?>" class="admin-checklist-item <?= $t['feito'] ? 'admin-checklist-item--done' : 'admin-checklist-item--pending' ?>">
+            <i class="bi <?= $t['feito'] ? 'bi-check-circle-fill' : 'bi-circle' ?> item-check"></i>
+            <span class="item-text"><?= htmlspecialchars($t['texto']) ?></span>
+            <?php if (!$t['feito']): ?>
+            <i class="bi bi-arrow-right item-arrow"></i>
+            <?php endif; ?>
+        </a>
+        <?php endforeach; ?>
+    </div>
 
     <!-- Stats -->
     <div class="admin-stats">
@@ -115,9 +172,14 @@ try {
             <span class="badge-pend"><?= $msgPend ?> pendente<?= $msgPend > 1 ? 's' : '' ?></span>
             <?php endif; ?>
         </a>
+        <a href="<?= BASE_URL ?>/admin/configuracoes"
+           class="admin-tab">
+            <i class="bi bi-gear"></i> Configurações
+        </a>
     </div>
 
     <!-- Tabela de confirmações -->
+    <h4 style="font-size:.9rem;color:var(--blue2);margin-bottom:10px;">Confirmações recebidas</h4>
     <div class="admin-table-wrap">
         <?php if (empty($confirmacoes)): ?>
         <div style="padding:40px;text-align:center;color:var(--blue4);">
@@ -151,6 +213,22 @@ try {
         </table>
         <?php endif; ?>
     </div>
+
+    </div><!-- /.admin-content -->
+
+    <aside class="admin-guide">
+        <div class="admin-guide-header">
+            <i class="bi bi-lightbulb-fill"></i>
+            <h4>Guia rápido</h4>
+        </div>
+        <div class="admin-guide-body">
+            <p>Use as abas pra navegar entre Confirmações, Convidados, Presentes, Mensagens
+            e Configurações. Cada tela tem seu próprio guia aqui do lado.</p>
+            <p>Comece pelo checklist ao lado se ainda está configurando o site — ele
+            reflete o estado real do banco em tempo real.</p>
+        </div>
+    </aside>
+    </div><!-- /.admin-layout -->
 
 </div>
 

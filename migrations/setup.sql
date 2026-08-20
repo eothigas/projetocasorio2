@@ -29,16 +29,18 @@ CREATE TABLE IF NOT EXISTS confirmacoes (
 -- Lista de presentes
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS presentes (
-    id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nome         VARCHAR(200)   NOT NULL,
-    descricao    TEXT,
-    categoria    VARCHAR(80)    DEFAULT 'Geral',
-    preco        DECIMAL(10,2),
-    link         TEXT,
-    imagem       VARCHAR(300),
-    comprado     TINYINT(1)     DEFAULT 0,
-    comprado_por VARCHAR(150),
-    comprado_em  DATETIME,
+    id               INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome             VARCHAR(200)   NOT NULL,
+    descricao        TEXT,
+    categoria        VARCHAR(80)    DEFAULT 'Geral',
+    tipo             ENUM('unico','cota') NOT NULL DEFAULT 'unico',
+    preco            DECIMAL(10,2),
+    valor_arrecadado DECIMAL(10,2) NOT NULL DEFAULT 0,
+    link             TEXT,
+    imagem           VARCHAR(300),
+    comprado         TINYINT(1)     DEFAULT 0,
+    comprado_por     VARCHAR(150),
+    comprado_em      DATETIME,
     INDEX idx_categoria (categoria),
     INDEX idx_comprado  (comprado)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -57,24 +59,48 @@ CREATE TABLE IF NOT EXISTS mensagens (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- Escolhas de presentes (ilimitado — vários convidados por presente)
+-- Reservas de presente com pagamento Pix
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS presentes_escolhas (
-    id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    presente_id  INT UNSIGNED NOT NULL,
-    nome         VARCHAR(150) NOT NULL,
-    criado_em    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS reservas (
+    id                 INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    presente_id        INT UNSIGNED NOT NULL,
+    nome_convidado     VARCHAR(150) NOT NULL,
+    email_convidado    VARCHAR(150),
+    valor              DECIMAL(10,2) NOT NULL,
+    status             ENUM('pendente','pago','expirado','cancelado') NOT NULL DEFAULT 'pendente',
+    metodo             ENUM('pix','loja','manual') NOT NULL DEFAULT 'pix',
+    mp_payment_id      VARCHAR(50)  NULL,
+    external_reference VARCHAR(50)  NOT NULL,
+    pix_qr_code        TEXT NULL,
+    pix_qr_code_base64 LONGTEXT NULL,
+    criado_em          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    pago_em            DATETIME NULL,
+    expira_em          DATETIME NULL,
+    UNIQUE KEY uq_external_reference (external_reference),
     FOREIGN KEY (presente_id) REFERENCES presentes(id) ON DELETE CASCADE,
-    INDEX idx_presente_id (presente_id),
-    INDEX idx_criado_em   (criado_em)
+    INDEX idx_status      (status),
+    INDEX idx_presente_id (presente_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- Log de notificações do webhook, pra depuração
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS webhook_logs (
+    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    mp_payment_id VARCHAR(50) NULL,
+    tipo          VARCHAR(50) NULL,
+    payload       TEXT NULL,
+    resultado     VARCHAR(255) NULL,
+    criado_em     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_mp_payment_id (mp_payment_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 -- Configurações gerais do sistema
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS configuracoes (
-    chave VARCHAR(50)  NOT NULL PRIMARY KEY,
-    valor VARCHAR(255) NOT NULL DEFAULT ''
+    chave VARCHAR(50)   NOT NULL PRIMARY KEY,
+    valor VARCHAR(1000) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT IGNORE INTO configuracoes (chave, valor) VALUES ('confirmacao_aberta', '0');

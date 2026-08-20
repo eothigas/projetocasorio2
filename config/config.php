@@ -57,6 +57,19 @@ if ($isLocal) {
 // === ADMIN ===
 define('ADMIN_PASS', 'casamento2026');
 
+// === MERCADO PAGO (Pix) ===
+// Access Token e chave secreta do webhook NÃO ficam aqui — são guardados
+// criptografados na tabela `configuracoes` (ver includes/mp-config.php) e
+// editados em /admin/configuracoes. Ajuste em Suas integrações > sua
+// aplicação > Credenciais, no painel do Mercado Pago.
+define('MP_SANDBOX', true);
+
+// Chave mestra usada para criptografar/descriptografar segredos salvos no
+// banco (AES-256-GCM, ver includes/crypto.php). NUNCA mude este valor
+// depois de já ter salvo credenciais — elas ficam ilegíveis. Se possível,
+// mova pra fora do webroot / variável de ambiente antes de virar produção.
+define('APP_SECRET_KEY', 'c22afcdf223709f5486bf9e956f5d5ecff7be956276312112a6cd9be99983018');
+
 // === CAMINHOS ===
 // ROOT_DIR: caminho absoluto no filesystem até a raiz do projeto
 define('ROOT_DIR', dirname(__DIR__));
