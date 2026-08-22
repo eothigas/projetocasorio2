@@ -85,7 +85,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                 $completo  = $ehCota ? $restante <= 0 : (bool) $p['comprado'];
                 $percCota  = $ehCota && $p['preco'] > 0 ? min(100, round(((float) $p['valor_arrecadado'] / (float) $p['preco']) * 100)) : 0;
             ?>
-            <div class="pres-card hidden" data-animation="fadeInUp">
+            <div class="pres-card hidden <?= $completo ? 'pres-card--done' : '' ?>" data-animation="fadeInUp">
 
                 <div class="pres-badge <?= $completo ? 'pres-badge--done' : 'pres-badge--open' ?>">
                     <?= $completo ? ($ehCota ? 'Arrecadado' : 'Dado com carinho') : ($ehCota ? 'Contribua' : 'Disponível') ?>
@@ -120,8 +120,8 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                         <div class="pres-cota-bar"><div class="pres-cota-fill" style="width:<?= $percCota ?>%"></div></div>
                         <span class="pres-cota-label">R$ <?= number_format($p['valor_arrecadado'], 2, ',', '.') ?> arrecadado (<?= $percCota ?>%)</span>
                     </div>
-                    <?php elseif ($completo && $p['comprado_por']): ?>
-                    <p class="pres-desc"><i class="bi bi-heart-fill me-1"></i>Dado por <?= htmlspecialchars($p['comprado_por']) ?></p>
+                    <?php elseif ($completo): ?>
+                    <p class="pres-desc"><i class="bi bi-heart-fill me-1"></i>Este presente já foi dado, obrigado!</p>
                     <?php endif; ?>
                 </div>
 
