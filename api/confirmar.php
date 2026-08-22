@@ -3,6 +3,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once dirname(__DIR__) . '/config/config.php';
 require_once ROOT_DIR . '/includes/db.php';
+require_once ROOT_DIR . '/includes/mailer.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -85,9 +86,14 @@ try {
     if ($acao === 'confirmar') {
         $grupoId   = (int) ($body['grupo_id'] ?? 0);
         $respostas = $body['respostas'] ?? [];
+        $email     = trim(strip_tags($body['email'] ?? ''));
 
         if ($grupoId <= 0 || !is_array($respostas) || empty($respostas)) {
             echo json_encode(['success' => false, 'message' => 'Dados inválidos.']);
+            exit;
+        }
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['success' => false, 'message' => 'Informe um e-mail válido para confirmar.']);
             exit;
         }
 
@@ -118,14 +124,35 @@ try {
             exit;
         }
 
+        $vaiMap = [];
         $update = $db->prepare("UPDATE convidados SET confirmado = ?, confirmado_em = ? WHERE id = ? AND grupo_id = ?");
         foreach ($respostas as $r) {
             $id  = (int) ($r['id'] ?? 0);
             $vai = !empty($r['vai']);
+            $vaiMap[$id] = $vai;
             $update->execute([$vai ? 1 : 0, $vai ? date('Y-m-d H:i:s') : null, $id, $grupoId]);
         }
 
-        $db->prepare("UPDATE grupos SET respondido = 1, respondido_em = NOW() WHERE id = ?")->execute([$grupoId]);
+        $grupoNomeStmt = $db->prepare("SELECT nome_grupo FROM grupos WHERE id = ?");
+        $grupoNomeStmt->execute([$grupoId]);
+        $nomeGrupo = $grupoNomeStmt->fetchColumn();
+
+        $db->prepare("UPDATE grupos SET respondido = 1, respondido_em = NOW(), email = ? WHERE id = ?")
+           ->execute([$email !== '' ? $email : null, $grupoId]);
+
+        $membrosNomes = $db->prepare("SELECT id, nome, responsavel FROM convidados WHERE grupo_id = ? ORDER BY responsavel DESC, id ASC");
+        $membrosNomes->execute([$grupoId]);
+        $membros = array_map(fn($m) => [
+            'nome' => $m['nome'],
+            'vai'  => $vaiMap[(int) $m['id']] ?? false,
+        ], $membrosNomes->fetchAll());
+
+        $nomeResponsavel = $membros[0]['nome'] ?? '';
+
+        if ($email !== '') {
+            enviarEmailConfirmacaoPresenca($email, $nomeResponsavel, $membros);
+        }
+        enviarEmailNotificacaoConfirmacaoNoivos($nomeGrupo, $email, $membros);
 
         $totalConf = (int) $db->query("SELECT COUNT(*) FROM convidados WHERE confirmado = 1")->fetchColumn();
         $confGrupo = count(array_filter($respostas, fn($r) => !empty($r['vai'])));

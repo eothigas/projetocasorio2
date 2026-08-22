@@ -112,6 +112,7 @@ INSERT IGNORE INTO configuracoes (chave, valor) VALUES ('confirmacao_aberta', '0
 CREATE TABLE IF NOT EXISTS grupos (
     id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nome_grupo    VARCHAR(150) NOT NULL,
+    email         VARCHAR(150),
     respondido    TINYINT(1)   NOT NULL DEFAULT 0,
     respondido_em DATETIME,
     criado_em     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,

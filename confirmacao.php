@@ -89,6 +89,14 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                     <span class="input-error" id="err-nome"></span>
                 </div>
 
+                <div class="form-group-custom">
+                    <label for="conf-email">E-mail *</label>
+                    <input type="email" id="conf-email" name="email"
+                           class="input-custom" placeholder="para receber a confirmação" required maxlength="150">
+                    <span class="input-error" id="err-email"></span>
+                    <small class="form-hint-email">Você recebe um e-mail de confirmação dos noivos — pode cair no spam, vale conferir lá.</small>
+                </div>
+
                 <button type="submit" class="btn-primary-custom conf-submit" id="btn-confirmar">
                     <i class="bi bi-check-circle-fill"></i>
                     <span>Confirmar minha presença</span>

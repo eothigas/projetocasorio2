@@ -251,3 +251,239 @@ HTML;
         return false;
     }
 }
+
+/**
+ * E-mail de confirmação de presença pro convidado responsável pelo grupo.
+ * Mesma identidade visual dos e-mails de presente.
+ *
+ * @param string $emailConvidado
+ * @param string $nomeResponsavel
+ * @param array<int,array{nome:string,vai:bool}> $membros
+ */
+function enviarEmailConfirmacaoPresenca(
+    string $emailConvidado,
+    string $nomeResponsavel,
+    array $membros
+): bool {
+    $host = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? 'localhost');
+    $from = 'agradecimento@' . $host;
+
+    $primeiroNome = trim(explode(' ', trim($nomeResponsavel))[0]);
+    $assunto      = 'Presença confirmada, ' . $primeiroNome . '! 💙';
+
+    $noivaEsc = htmlspecialchars(NOIVA, ENT_QUOTES);
+    $noivoEsc = htmlspecialchars(NOIVO, ENT_QUOTES);
+    $nomeEsc  = htmlspecialchars($primeiroNome, ENT_QUOTES);
+
+    $vao  = array_filter($membros, fn($m) => $m['vai']);
+    $naoVao = array_filter($membros, fn($m) => !$m['vai']);
+
+    $listaVao = implode('', array_map(
+        fn($m) => '<li style="margin:0 0 6px;">' . htmlspecialchars($m['nome'], ENT_QUOTES) . '</li>',
+        $vao
+    ));
+    $listaNaoVao = implode('', array_map(
+        fn($m) => '<li style="margin:0 0 6px;">' . htmlspecialchars($m['nome'], ENT_QUOTES) . '</li>',
+        $naoVao
+    ));
+
+    $blocoVao = $vao ? <<<HTML
+            <p style="margin:0 0 8px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:13px;color:#336fa5;font-weight:600;">Confirmados:</p>
+            <ul style="margin:0 0 20px;padding-left:20px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:14px;color:#042342;">{$listaVao}</ul>
+HTML : '';
+
+    $blocoNaoVao = $naoVao ? <<<HTML
+            <p style="margin:0 0 8px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:13px;color:#4c5e70;font-weight:600;">Não vão:</p>
+            <ul style="margin:0 0 20px;padding-left:20px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:14px;color:#4c5e70;">{$listaNaoVao}</ul>
+HTML : '';
+
+    $localEsc = htmlspecialchars(LOCAL_NOME, ENT_QUOTES);
+    $endEsc   = htmlspecialchars(LOCAL_END, ENT_QUOTES);
+    $dataEsc  = htmlspecialchars(DIA_SEMANA . ', ' . DATA_BR . ' às ' . HORA, ENT_QUOTES);
+
+    $corpo = <<<HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{$assunto}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f0f8ff;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f8ff;padding:32px 16px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(4,35,66,0.10);">
+
+        <tr>
+          <td align="center" style="background:linear-gradient(135deg,#042342 0%,#144776 60%,#336fa5 100%);padding:26px 24px;">
+            <div style="font-family:'Great Vibes',Georgia,'Times New Roman',serif;font-style:italic;font-size:34px;line-height:1.1;color:#ffffff;">
+              Querido(a) {$nomeEsc},
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:40px 40px 8px;">
+            <p style="margin:0 0 18px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+              Sua presença foi confirmada com sucesso — nosso coração se encheu de alegria só de
+              pensar em celebrar esse dia com você. ❤️
+            </p>
+
+            {$blocoVao}
+            {$blocoNaoVao}
+
+            <p style="margin:0 0 18px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+              Anota na agenda:
+            </p>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f8ff;border-radius:10px;margin:0 0 20px;">
+              <tr>
+                <td style="padding:16px 20px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:14px;color:#042342;line-height:1.8;">
+                  <strong>Data:</strong> {$dataEsc}<br>
+                  <strong>Local:</strong> {$localEsc}<br>
+                  <strong>Endereço:</strong> {$endEsc}
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 8px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+              Mal podemos esperar para celebrar com você!
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding:28px 40px 44px;">
+            <p style="margin:0 0 6px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:13px;color:#336fa5;">
+              Com todo nosso carinho,
+            </p>
+            <p style="margin:0;font-family:'Great Vibes',Georgia,'Times New Roman',serif;font-style:italic;font-size:32px;color:#042342;">
+              {$noivaEsc} &amp; {$noivoEsc}
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="background:#042342;padding:20px 24px;">
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:11px;color:#8aabd6;">
+              Mensagem automática — por favor, não responda este e-mail.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+HTML;
+
+    $headers  = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "From: {$noivaEsc} & {$noivoEsc} <{$from}>\r\n";
+    $headers .= "Reply-To: {$from}\r\n";
+
+    try {
+        return @mail($emailConvidado, '=?UTF-8?B?' . base64_encode($assunto) . '?=', $corpo, $headers);
+    } catch (Throwable $e) {
+        error_log('[mailer] falha ao enviar e-mail de confirmação: ' . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Notifica os noivos que um grupo confirmou presença.
+ *
+ * @param string $nomeGrupo
+ * @param string $emailConvidado E-mail informado, ou '' se não informado.
+ * @param array<int,array{nome:string,vai:bool}> $membros
+ */
+function enviarEmailNotificacaoConfirmacaoNoivos(
+    string $nomeGrupo,
+    string $emailConvidado,
+    array $membros
+): bool {
+    $destinatarios = EMAILS_NOTIFICACAO_PRESENTE;
+    if (empty($destinatarios)) {
+        return false;
+    }
+
+    $host = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? 'localhost');
+    $from = 'agradecimento@' . $host;
+
+    $noivaEsc  = htmlspecialchars(NOIVA, ENT_QUOTES);
+    $noivoEsc  = htmlspecialchars(NOIVO, ENT_QUOTES);
+    $grupoEsc  = htmlspecialchars($nomeGrupo, ENT_QUOTES);
+    $emailEsc  = $emailConvidado !== '' ? htmlspecialchars($emailConvidado, ENT_QUOTES) : 'não informado';
+
+    $confirmados = count(array_filter($membros, fn($m) => $m['vai']));
+    $total       = count($membros);
+
+    $linhas = implode('', array_map(
+        fn($m) => '<tr>'
+            . '<td style="padding:6px 0;color:#042342;font-size:13px;">' . htmlspecialchars($m['nome'], ENT_QUOTES) . '</td>'
+            . '<td style="padding:6px 0;font-size:13px;text-align:right;font-weight:600;color:' . ($m['vai'] ? '#2e9e5b' : '#c0392b') . ';">' . ($m['vai'] ? 'Vai' : 'Não vai') . '</td>'
+            . '</tr>',
+        $membros
+    ));
+
+    $assunto = 'Presença confirmada: ' . $nomeGrupo . ' (' . $confirmados . '/' . $total . ')';
+
+    $corpo = <<<HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>{$assunto}</title></head>
+<body style="margin:0;padding:0;background-color:#f0f8ff;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f8ff;padding:32px 16px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(4,35,66,0.10);">
+
+        <tr>
+          <td style="background:#144776;padding:20px 28px;">
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9ecae3;">Confirmação de presença</p>
+            <p style="margin:4px 0 0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:18px;font-weight:600;color:#ffffff;">{$grupoEsc} confirmou ✅</p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:24px 28px 8px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:14px;">
+              {$linhas}
+            </table>
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:13px;color:#4c5e70;">
+              E-mail informado: {$emailEsc}
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:20px 28px 26px;">
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:12px;color:#8098ac;">
+              {$confirmados} de {$total} confirmado(s) neste grupo.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+HTML;
+
+    $headers  = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "From: {$noivaEsc} & {$noivoEsc} <{$from}>\r\n";
+    $headers .= "Reply-To: {$from}\r\n";
+
+    try {
+        return @mail(implode(',', $destinatarios), '=?UTF-8?B?' . base64_encode($assunto) . '?=', $corpo, $headers);
+    } catch (Throwable $e) {
+        error_log('[mailer] falha ao notificar noivos (confirmação): ' . $e->getMessage());
+        return false;
+    }
+}

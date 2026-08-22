@@ -5,6 +5,7 @@
     const alertBox  = document.getElementById('conf-alert');
     const btnSubmit = document.getElementById('btn-confirmar');
     const grupoBox  = document.getElementById('conf-grupo');
+    const emailInput = document.getElementById('conf-email');
     const BASE_URL  = document.querySelector('meta[name="base-url"]')?.content ?? '';
 
     function showAlert(type, msg) {
@@ -20,18 +21,36 @@
     }
 
     function validate() {
-        const nome    = document.getElementById('conf-nome');
-        const errNome = document.getElementById('err-nome');
+        const nome     = document.getElementById('conf-nome');
+        const errNome  = document.getElementById('err-nome');
+        const email    = document.getElementById('conf-email');
+        const errEmail = document.getElementById('err-email');
+        let valido = true;
 
         if (!nome.value.trim()) {
             nome.classList.add('is-invalid');
             errNome.textContent = 'Nome é obrigatório.';
-            return false;
+            valido = false;
+        } else {
+            nome.classList.remove('is-invalid');
+            errNome.textContent = '';
         }
 
-        nome.classList.remove('is-invalid');
-        errNome.textContent = '';
-        return true;
+        const emailValor = email.value.trim();
+        if (!emailValor) {
+            email.classList.add('is-invalid');
+            errEmail.textContent = 'E-mail é obrigatório.';
+            valido = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValor)) {
+            email.classList.add('is-invalid');
+            errEmail.textContent = 'Digite um e-mail válido.';
+            valido = false;
+        } else {
+            email.classList.remove('is-invalid');
+            errEmail.textContent = '';
+        }
+
+        return valido;
     }
 
     function renderGrupo(grupoId, membros) {
@@ -84,6 +103,8 @@
             vai: el.dataset.vai === '1',
         }));
 
+        const email = emailInput?.value.trim() ?? '';
+
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
 
@@ -91,7 +112,7 @@
             const resp = await fetch(BASE_URL + '/api/confirmar', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({ acao: 'confirmar', grupo_id: parseInt(grupoId, 10), respostas }),
+                body:    JSON.stringify({ acao: 'confirmar', grupo_id: parseInt(grupoId, 10), respostas, email }),
             });
             const data = await resp.json();
 
