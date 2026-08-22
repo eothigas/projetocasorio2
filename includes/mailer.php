@@ -25,7 +25,7 @@ function enviarEmailAgradecimentoPresente(
     $assunto      = 'Obrigado pelo presente, ' . $primeiroNome . '! 💙';
 
     $detalheValor = $valor !== null
-        ? '<p style="margin:0 0 22px;font-family:\'Poppins\',Arial,sans-serif;font-size:14px;color:#336fa5;">Sua contribuição: <strong>R$ ' . number_format($valor, 2, ',', '.') . '</strong></p>'
+        ? '<p style="margin:0 0 22px;font-family:\'Poppins\',\'Trebuchet MS\',Arial,sans-serif;font-size:14px;color:#336fa5;">Sua contribuição: <strong>R$ ' . number_format($valor, 2, ',', '.') . '</strong></p>'
         : '';
 
     $nomeEsc     = htmlspecialchars($primeiroNome, ENT_QUOTES);
@@ -40,8 +40,14 @@ function enviarEmailAgradecimentoPresente(
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{$assunto}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,500&family=Poppins:wght@400;500;600&display=swap');
+</style>
 </head>
-<body style="margin:0;padding:0;background-color:#f0f8ff;font-family:'Poppins',Arial,sans-serif;">
+<body style="margin:0;padding:0;background-color:#f0f8ff;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f8ff;padding:32px 16px;">
   <tr>
     <td align="center">
@@ -50,7 +56,7 @@ function enviarEmailAgradecimentoPresente(
         <!-- Header: gradiente da identidade -->
         <tr>
           <td align="center" style="background:linear-gradient(135deg,#042342 0%,#144776 60%,#336fa5 100%);padding:26px 24px;">
-            <div style="font-family:'Great Vibes',cursive,Georgia,serif;font-size:40px;line-height:1.1;color:#ffffff;">
+            <div style="font-family:'Great Vibes',Georgia,'Times New Roman',serif;font-style:italic;font-size:34px;line-height:1.1;color:#ffffff;">
               Querido(a) {$nomeEsc},
             </div>
           </td>
@@ -59,31 +65,31 @@ function enviarEmailAgradecimentoPresente(
         <!-- Corpo -->
         <tr>
           <td style="padding:40px 40px 8px;">
-            <p style="margin:0 0 18px;font-family:'Poppins',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+            <p style="margin:0 0 18px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
               Hoje, ao recebermos a confirmação do seu presente,
-              <span style="font-family:'Poppins',Arial,sans-serif;color:#336fa5;font-weight:600;">{$presenteEsc}</span>,
+              <span style="font-family:'Poppins','Trebuchet MS',Arial,sans-serif;color:#336fa5;font-weight:600;">{$presenteEsc}</span>,
               nosso coração se encheu de gratidão. ❤️
             </p>
 
             {$detalheValor}
 
-            <p style="margin:0 0 18px;font-family:'Poppins',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+            <p style="margin:0 0 18px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
               Mais do que o presente em si, queremos agradecer pelo carinho, pelo cuidado e por
               escolher fazer parte de um dos momentos mais especiais das nossas vidas.
             </p>
 
-            <p style="margin:0 0 18px;font-family:'Poppins',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+            <p style="margin:0 0 18px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
               Estamos vivendo a alegria de começar um novo capítulo, cheio de sonhos, expectativas
               e planos. E saber que temos pessoas tão especiais ao nosso lado, celebrando, torcendo
               e compartilhando conosco esse momento, torna tudo ainda mais bonito e significativo.
             </p>
 
-            <p style="margin:0 0 18px;font-family:'Poppins',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+            <p style="margin:0 0 18px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
               Cada gesto de carinho ficará guardado em nossa memória e em nosso coração. Somos
               verdadeiramente gratos por termos você fazendo parte da nossa história.
             </p>
 
-            <p style="margin:0 0 8px;font-family:'Poppins',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
+            <p style="margin:0 0 8px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
               Oramos para que Deus retribua todo esse carinho, abençoe profundamente a sua vida e
               esteja presente em cada capítulo da sua história, assim como tem cuidado da nossa.
             </p>
@@ -96,7 +102,7 @@ function enviarEmailAgradecimentoPresente(
             <p style="margin:0 0 6px;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:19px;line-height:1.5;color:#144776;">
               &ldquo;Nós amamos porque ele nos amou primeiro.&rdquo;
             </p>
-            <p style="margin:0;font-family:'Poppins',Arial,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4e8bb8;">
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4e8bb8;">
               1 João 4:19
             </p>
           </td>
@@ -105,10 +111,10 @@ function enviarEmailAgradecimentoPresente(
         <!-- Assinatura -->
         <tr>
           <td align="center" style="padding:28px 40px 44px;">
-            <p style="margin:0 0 6px;font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#336fa5;">
+            <p style="margin:0 0 6px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:13px;color:#336fa5;">
               Com todo nosso carinho e gratidão,
             </p>
-            <p style="margin:0;font-family:'Great Vibes',cursive,Georgia,serif;font-size:38px;color:#042342;">
+            <p style="margin:0;font-family:'Great Vibes',Georgia,'Times New Roman',serif;font-style:italic;font-size:32px;color:#042342;">
               {$noivaEsc} &amp; {$noivoEsc}
             </p>
           </td>
@@ -117,7 +123,7 @@ function enviarEmailAgradecimentoPresente(
         <!-- Rodapé -->
         <tr>
           <td align="center" style="background:#042342;padding:20px 24px;">
-            <p style="margin:0;font-family:'Poppins',Arial,sans-serif;font-size:11px;color:#8aabd6;">
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:11px;color:#8aabd6;">
               Mensagem automática — por favor, não responda este e-mail.
             </p>
           </td>
@@ -192,7 +198,7 @@ function enviarEmailNotificacaoNoivos(
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head><meta charset="UTF-8"><title>{$assunto}</title></head>
-<body style="margin:0;padding:0;background-color:#f0f8ff;font-family:'Poppins',Arial,sans-serif;">
+<body style="margin:0;padding:0;background-color:#f0f8ff;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f8ff;padding:32px 16px;">
   <tr>
     <td align="center">
@@ -200,8 +206,8 @@ function enviarEmailNotificacaoNoivos(
 
         <tr>
           <td style="background:#144776;padding:20px 28px;">
-            <p style="margin:0;font-family:'Poppins',Arial,sans-serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9ecae3;">Lista de presentes</p>
-            <p style="margin:4px 0 0;font-family:'Poppins',Arial,sans-serif;font-size:18px;font-weight:600;color:#ffffff;">Novo presente confirmado 🎁</p>
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9ecae3;">Lista de presentes</p>
+            <p style="margin:4px 0 0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:18px;font-weight:600;color:#ffffff;">Novo presente confirmado 🎁</p>
           </td>
         </tr>
 
@@ -219,7 +225,7 @@ function enviarEmailNotificacaoNoivos(
 
         <tr>
           <td style="padding:20px 28px 26px;">
-            <p style="margin:0;font-family:'Poppins',Arial,sans-serif;font-size:12px;color:#8098ac;">
+            <p style="margin:0;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:12px;color:#8098ac;">
               O convidado já recebeu o e-mail de agradecimento automaticamente.
             </p>
           </td>

@@ -191,6 +191,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                             <label for="presente-email">E-mail (opcional)</label>
                             <input type="email" id="presente-email" name="email"
                                    class="input-custom" placeholder="para receber a confirmação" maxlength="150">
+                            <small class="form-hint-email">Se preencher, você recebe um e-mail de agradecimento dos noivos — pode cair no spam, vale conferir lá.</small>
                         </div>
                         <div class="form-group-custom" id="grupo-valor" style="display:none;">
                             <label for="presente-valor">Valor da contribuição (R$) *</label>
@@ -257,6 +258,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                             <label for="guia-email">E-mail (opcional)</label>
                             <input type="email" id="guia-email" name="email"
                                    class="input-custom" placeholder="para receber a confirmação" maxlength="150">
+                            <small class="form-hint-email">Se preencher, você recebe um e-mail de agradecimento dos noivos — pode cair no spam, vale conferir lá.</small>
                         </div>
                     </form>
                 </div>
@@ -300,6 +302,7 @@ require_once ROOT_DIR . '/includes/_navbar.php';
                             <label for="manual-email">E-mail (opcional)</label>
                             <input type="email" id="manual-email" name="email"
                                    class="input-custom" placeholder="para receber a confirmação" maxlength="150">
+                            <small class="form-hint-email">Se preencher, você recebe um e-mail de agradecimento dos noivos — pode cair no spam, vale conferir lá.</small>
                         </div>
                     </form>
                 </div>
