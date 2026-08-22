@@ -2,6 +2,7 @@
 require_once dirname(__DIR__) . '/config/config.php';
 require_once ROOT_DIR . '/includes/db.php';
 require_once ROOT_DIR . '/includes/mp-config.php';
+require_once ROOT_DIR . '/includes/mailer.php';
 
 /**
  * Loga a notificação (sempre, mesmo em erro) pra depuração posterior.
@@ -142,8 +143,9 @@ try {
     );
     $stmt->execute([(string) $dataId, $reserva['id']]);
 
+    $presente = null;
     if ($stmt->rowCount() > 0) {
-        $stmtP = $db->prepare("SELECT tipo FROM presentes WHERE id = ? FOR UPDATE");
+        $stmtP = $db->prepare("SELECT nome, tipo FROM presentes WHERE id = ? FOR UPDATE");
         $stmtP->execute([$reserva['presente_id']]);
         $presente = $stmtP->fetch();
 
@@ -161,6 +163,25 @@ try {
     }
 
     $db->commit();
+
+    if ($presente) {
+        if (!empty($reserva['email_convidado'])) {
+            enviarEmailAgradecimentoPresente(
+                $reserva['email_convidado'],
+                $reserva['nome_convidado'],
+                $presente['nome'],
+                $presente['tipo'] === 'cota' ? (float) $reserva['valor'] : null
+            );
+        }
+        enviarEmailNotificacaoNoivos(
+            $reserva['nome_convidado'],
+            $reserva['email_convidado'] ?? '',
+            $presente['nome'],
+            $presente['tipo'] === 'cota' ? (float) $reserva['valor'] : null,
+            'pix'
+        );
+    }
+
     logWebhook($db, (string) $dataId, $tipo, $rawBody, $resultado);
     echo json_encode(['ok' => true]);
 

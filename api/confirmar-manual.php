@@ -3,6 +3,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once dirname(__DIR__) . '/config/config.php';
 require_once ROOT_DIR . '/includes/db.php';
+require_once ROOT_DIR . '/includes/mailer.php';
 
 session_start();
 
@@ -120,6 +121,23 @@ try {
     }
 
     $db->commit();
+
+    if ($email !== '') {
+        enviarEmailAgradecimentoPresente(
+            $email,
+            $nome,
+            $presente['nome'],
+            $presente['tipo'] === 'cota' ? $valor : null
+        );
+    }
+    enviarEmailNotificacaoNoivos(
+        $nome,
+        $email,
+        $presente['nome'],
+        $presente['tipo'] === 'cota' ? $valor : null,
+        $metodo
+    );
+
     echo json_encode(['success' => true]);
 
 } catch (Exception $e) {

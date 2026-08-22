@@ -57,6 +57,12 @@ if ($isLocal) {
 // === ADMIN ===
 define('ADMIN_PASS', 'casamento2026');
 
+// === NOTIFICAÇÃO DE PRESENTES (e-mails dos noivos) ===
+define('EMAILS_NOTIFICACAO_PRESENTE', [
+    'thi16thiago@gmail.com',
+    'anacarolinecordeirodejesus6@gmail.com',
+]);
+
 // === MERCADO PAGO (Pix) ===
 // Access Token e chave secreta do webhook NÃO ficam aqui — são guardados
 // criptografados na tabela `configuracoes` (ver includes/mp-config.php) e
