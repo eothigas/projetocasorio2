@@ -258,11 +258,13 @@ HTML;
  *
  * @param string $emailConvidado
  * @param string $nomeResponsavel
+ * @param string $nomeGrupo
  * @param array<int,array{nome:string,vai:bool}> $membros
  */
 function enviarEmailConfirmacaoPresenca(
     string $emailConvidado,
     string $nomeResponsavel,
+    string $nomeGrupo,
     array $membros
 ): bool {
     $host = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? 'localhost');
@@ -274,6 +276,7 @@ function enviarEmailConfirmacaoPresenca(
     $noivaEsc = htmlspecialchars(NOIVA, ENT_QUOTES);
     $noivoEsc = htmlspecialchars(NOIVO, ENT_QUOTES);
     $nomeEsc  = htmlspecialchars($primeiroNome, ENT_QUOTES);
+    $grupoEsc = htmlspecialchars($nomeGrupo, ENT_QUOTES);
 
     $vao  = array_filter($membros, fn($m) => $m['vai']);
     $naoVao = array_filter($membros, fn($m) => !$m['vai']);
@@ -299,7 +302,9 @@ HTML : '';
 
     $localEsc = htmlspecialchars(LOCAL_NOME, ENT_QUOTES);
     $endEsc   = htmlspecialchars(LOCAL_END, ENT_QUOTES);
-    $dataEsc  = htmlspecialchars(DIA_SEMANA . ', ' . DATA_BR . ' às ' . HORA, ENT_QUOTES);
+    $mapsEsc  = htmlspecialchars(LOCAL_MAPS, ENT_QUOTES);
+    $dataEsc  = htmlspecialchars(DIA_SEMANA . ', ' . DATA_BR, ENT_QUOTES);
+    $horaEsc  = htmlspecialchars(HORA, ENT_QUOTES);
 
     $corpo = <<<HTML
 <!DOCTYPE html>
@@ -326,8 +331,8 @@ HTML : '';
         <tr>
           <td style="padding:40px 40px 8px;">
             <p style="margin:0 0 18px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:15px;line-height:1.75;color:#042342;">
-              Sua presença foi confirmada com sucesso — nosso coração se encheu de alegria só de
-              pensar em celebrar esse dia com você. ❤️
+              A presença da família <strong>{$grupoEsc}</strong> foi confirmada com sucesso —
+              nosso coração se encheu de alegria só de pensar em celebrar esse dia com vocês. ❤️
             </p>
 
             {$blocoVao}
@@ -341,7 +346,8 @@ HTML : '';
               <tr>
                 <td style="padding:16px 20px;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;font-size:14px;color:#042342;line-height:1.8;">
                   <strong>Data:</strong> {$dataEsc}<br>
-                  <strong>Local:</strong> {$localEsc}<br>
+                  <strong>Horário:</strong> {$horaEsc}<br>
+                  <strong>Local:</strong> <a href="{$mapsEsc}" style="color:#336fa5;text-decoration:underline;" target="_blank">{$localEsc}</a><br>
                   <strong>Endereço:</strong> {$endEsc}
                 </td>
               </tr>

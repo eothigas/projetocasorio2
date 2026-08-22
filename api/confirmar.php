@@ -150,7 +150,7 @@ try {
         $nomeResponsavel = $membros[0]['nome'] ?? '';
 
         if ($email !== '') {
-            enviarEmailConfirmacaoPresenca($email, $nomeResponsavel, $membros);
+            enviarEmailConfirmacaoPresenca($email, $nomeResponsavel, $nomeGrupo, $membros);
         }
         enviarEmailNotificacaoConfirmacaoNoivos($nomeGrupo, $email, $membros);
 
