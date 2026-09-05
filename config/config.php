@@ -80,7 +80,9 @@ define('APP_SECRET_KEY', 'c22afcdf223709f5486bf9e956f5d5ecff7be956276312112a6cd9
 // ROOT_DIR: caminho absoluto no filesystem até a raiz do projeto
 define('ROOT_DIR', dirname(__DIR__));
 
-// BASE_URL: caminho web base (sem trailing slash)
-// Ex: '/_Dev/projetocasorio2' ou '' se estiver na raiz do servidor
-// === URLs ===
-define('BASE_URL', $isLocal ? '/_pessoal/projetocasorio2' : '/casamento');
+// BASE_URL: caminho web base (sem trailing slash), calculado a partir da
+// posição de ROOT_DIR dentro do DOCUMENT_ROOT — funciona tanto na raiz do
+// domínio quanto em subpasta, sem precisar editar isto a cada migração.
+$docRoot   = str_replace('\\', '/', rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/'));
+$rootDirWeb = str_replace('\\', '/', ROOT_DIR);
+define('BASE_URL', str_starts_with($rootDirWeb, $docRoot) ? substr($rootDirWeb, strlen($docRoot)) : '');

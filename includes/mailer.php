@@ -40,12 +40,6 @@ function enviarEmailAgradecimentoPresente(
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{$assunto}</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,500&family=Poppins:wght@400;500;600&display=swap');
-</style>
 </head>
 <body style="margin:0;padding:0;background-color:#f0f8ff;font-family:'Poppins','Trebuchet MS',Arial,sans-serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f8ff;padding:32px 16px;">

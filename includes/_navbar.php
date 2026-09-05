@@ -48,15 +48,15 @@ function navActive(string $page, string $current): string {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-cta <?= navActive('confirmacao', $currentPage) ?>"
-                       href="<?= BASE_URL ?>/confirmacao">
-                        <i class="bi bi-check-circle me-1"></i>Confirmar Presença
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link <?= navActive('mensagens', $currentPage) ?>"
                        href="<?= BASE_URL ?>/mensagens">
                         <i class="bi bi-chat-heart me-1"></i>Mensagens
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-cta <?= navActive('confirmacao', $currentPage) ?>"
+                       href="<?= BASE_URL ?>/confirmacao">
+                        <i class="bi bi-check-circle me-1"></i>Confirmar Presença
                     </a>
                 </li>
             </ul>
